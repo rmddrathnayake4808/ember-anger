@@ -11,6 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WalkRouteImport } from './routes/walk'
 import { Route as VentRouteImport } from './routes/vent'
+import { Route as SignupRouteImport } from './routes/signup'
+import { Route as SigninRouteImport } from './routes/signin'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as JournalRouteImport } from './routes/journal'
 import { Route as BreatheRouteImport } from './routes/breathe'
 import { Route as IndexRouteImport } from './routes/index'
@@ -23,6 +26,21 @@ const WalkRoute = WalkRouteImport.update({
 const VentRoute = VentRouteImport.update({
   id: '/vent',
   path: '/vent',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SigninRoute = SigninRouteImport.update({
+  id: '/signin',
+  path: '/signin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const JournalRoute = JournalRouteImport.update({
@@ -45,6 +63,9 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/breathe': typeof BreatheRoute
   '/journal': typeof JournalRoute
+  '/settings': typeof SettingsRoute
+  '/signin': typeof SigninRoute
+  '/signup': typeof SignupRoute
   '/vent': typeof VentRoute
   '/walk': typeof WalkRoute
 }
@@ -52,6 +73,9 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/breathe': typeof BreatheRoute
   '/journal': typeof JournalRoute
+  '/settings': typeof SettingsRoute
+  '/signin': typeof SigninRoute
+  '/signup': typeof SignupRoute
   '/vent': typeof VentRoute
   '/walk': typeof WalkRoute
 }
@@ -60,21 +84,52 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/breathe': typeof BreatheRoute
   '/journal': typeof JournalRoute
+  '/settings': typeof SettingsRoute
+  '/signin': typeof SigninRoute
+  '/signup': typeof SignupRoute
   '/vent': typeof VentRoute
   '/walk': typeof WalkRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/breathe' | '/journal' | '/vent' | '/walk'
+  fullPaths:
+    | '/'
+    | '/breathe'
+    | '/journal'
+    | '/settings'
+    | '/signin'
+    | '/signup'
+    | '/vent'
+    | '/walk'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/breathe' | '/journal' | '/vent' | '/walk'
-  id: '__root__' | '/' | '/breathe' | '/journal' | '/vent' | '/walk'
+  to:
+    | '/'
+    | '/breathe'
+    | '/journal'
+    | '/settings'
+    | '/signin'
+    | '/signup'
+    | '/vent'
+    | '/walk'
+  id:
+    | '__root__'
+    | '/'
+    | '/breathe'
+    | '/journal'
+    | '/settings'
+    | '/signin'
+    | '/signup'
+    | '/vent'
+    | '/walk'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BreatheRoute: typeof BreatheRoute
   JournalRoute: typeof JournalRoute
+  SettingsRoute: typeof SettingsRoute
+  SigninRoute: typeof SigninRoute
+  SignupRoute: typeof SignupRoute
   VentRoute: typeof VentRoute
   WalkRoute: typeof WalkRoute
 }
@@ -93,6 +148,27 @@ declare module '@tanstack/react-router' {
       path: '/vent'
       fullPath: '/vent'
       preLoaderRoute: typeof VentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signin': {
+      id: '/signin'
+      path: '/signin'
+      fullPath: '/signin'
+      preLoaderRoute: typeof SigninRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/journal': {
@@ -123,18 +199,12 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BreatheRoute: BreatheRoute,
   JournalRoute: JournalRoute,
+  SettingsRoute: SettingsRoute,
+  SigninRoute: SigninRoute,
+  SignupRoute: SignupRoute,
   VentRoute: VentRoute,
   WalkRoute: WalkRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}
