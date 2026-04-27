@@ -4,7 +4,7 @@ import { AppShell } from "@/components/AppShell";
 import { storage } from "@/lib/storage";
 
 export const Route = createFileRoute("/journal")({
-  component: Journal;
+  component: Journal,
 });
 
 function Journal() {
