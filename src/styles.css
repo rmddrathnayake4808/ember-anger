@@ -102,18 +102,35 @@
 }
 
 .dark {
-  --background: oklch(0.22 0.02 30);
-  --foreground: var(--sand-100);
-  --card: oklch(0.27 0.022 30);
-  --card-foreground: var(--sand-100);
-  --popover: oklch(0.27 0.022 30);
-  --popover-foreground: var(--sand-100);
+  /* Warm clay night palette */
+  --sand-50: oklch(0.32 0.018 30);
+  --sand-100: oklch(0.24 0.015 30);
+  --sand-200: oklch(0.3 0.018 30);
+  --sand-300: oklch(0.4 0.02 30);
+  --clay: oklch(0.65 0.13 38);
+  --clay-dark: oklch(0.5 0.12 38);
+  --ink: oklch(0.94 0.012 40);
+  --ink-light: oklch(0.78 0.015 30);
+  --flow: oklch(0.72 0.06 145);
+  --flow-soft: oklch(0.72 0.06 145 / 0.18);
+
+  --background: oklch(0.18 0.012 30);
+  --foreground: var(--ink);
+  --card: var(--sand-50);
+  --card-foreground: var(--ink);
+  --popover: var(--sand-50);
+  --popover-foreground: var(--ink);
   --primary: var(--clay);
-  --primary-foreground: var(--sand-50);
-  --secondary: oklch(0.32 0.022 30);
-  --secondary-foreground: var(--sand-100);
-  --muted: oklch(0.32 0.022 30);
-  --muted-foreground: oklch(0.7 0.02 30);
+  --primary-foreground: oklch(0.18 0.012 30);
+  --primary-deep: var(--clay-dark);
+  --secondary: var(--sand-200);
+  --secondary-foreground: var(--ink);
+  --muted: var(--sand-200);
+  --muted-foreground: var(--ink-light);
+  --accent: var(--flow);
+  --accent-foreground: oklch(0.18 0.012 30);
+  --destructive: oklch(0.65 0.2 27);
+  --destructive-foreground: var(--ink);
   --border: oklch(1 0 0 / 8%);
   --input: oklch(1 0 0 / 12%);
   --ring: var(--clay);

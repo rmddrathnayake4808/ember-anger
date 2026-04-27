@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import { storage } from "@/lib/storage";
+import { useSystemTheme } from "@/hooks/use-system-theme";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -22,14 +23,18 @@ const TENSION_MESSAGES = [
 ];
 
 function Home() {
+  useSystemTheme();
   const [tension, setTension] = useState(5);
   const [streak, setStreak] = useState(0);
   const [name, setName] = useState("friend");
+  const [greeting, setGreeting] = useState("Hello");
 
   useEffect(() => {
     setTension(storage.getTension());
     setStreak(storage.getStreak());
     setName(storage.getName());
+    const h = new Date().getHours();
+    setGreeting(h < 12 ? "Morning" : h < 18 ? "Afternoon" : "Evening");
   }, []);
 
   const onTensionChange = (v: number) => {
@@ -37,13 +42,6 @@ function Home() {
     storage.setTension(v);
     setStreak(storage.getStreak());
   };
-
-  const greeting = (() => {
-    const h = new Date().getHours();
-    if (h < 12) return "Morning";
-    if (h < 18) return "Afternoon";
-    return "Evening";
-  })();
 
   const fillPct = (tension / 10) * 100;
 
