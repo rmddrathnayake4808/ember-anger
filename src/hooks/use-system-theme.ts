@@ -1,30 +1,18 @@
 import { useEffect } from "react";
+import { applyTheme, getStoredTheme } from "@/lib/theme";
 
 /**
- * Syncs the `dark` class on <html> with the device's color-scheme preference,
- * and updates the meta theme-color so the browser chrome (mobile address bar)
- * matches the current background.
+ * Applies stored theme on mount and follows device theme when in "system" mode.
+ * Updates <meta name="theme-color"> to match the current background.
  */
 export function useSystemTheme() {
   useEffect(() => {
-    const root = document.documentElement;
+    const mode = getStoredTheme();
+    applyTheme(mode);
+
+    if (mode !== "system") return;
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
-
-    const apply = (isDark: boolean) => {
-      root.classList.toggle("dark", isDark);
-      // Read computed --background and reflect into <meta name="theme-color">
-      const bg = getComputedStyle(root).getPropertyValue("--background").trim();
-      let meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
-      if (!meta) {
-        meta = document.createElement("meta");
-        meta.name = "theme-color";
-        document.head.appendChild(meta);
-      }
-      if (bg) meta.content = bg;
-    };
-
-    apply(mq.matches);
-    const onChange = (e: MediaQueryListEvent) => apply(e.matches);
+    const onChange = () => applyTheme("system");
     mq.addEventListener("change", onChange);
     return () => mq.removeEventListener("change", onChange);
   }, []);
