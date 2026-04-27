@@ -9,8 +9,32 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WalkRouteImport } from './routes/walk'
+import { Route as VentRouteImport } from './routes/vent'
+import { Route as JournalRouteImport } from './routes/journal'
+import { Route as BreatheRouteImport } from './routes/breathe'
 import { Route as IndexRouteImport } from './routes/index'
 
+const WalkRoute = WalkRouteImport.update({
+  id: '/walk',
+  path: '/walk',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VentRoute = VentRouteImport.update({
+  id: '/vent',
+  path: '/vent',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JournalRoute = JournalRouteImport.update({
+  id: '/journal',
+  path: '/journal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BreatheRoute = BreatheRouteImport.update({
+  id: '/breathe',
+  path: '/breathe',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +43,72 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/breathe': typeof BreatheRoute
+  '/journal': typeof JournalRoute
+  '/vent': typeof VentRoute
+  '/walk': typeof WalkRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/breathe': typeof BreatheRoute
+  '/journal': typeof JournalRoute
+  '/vent': typeof VentRoute
+  '/walk': typeof WalkRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/breathe': typeof BreatheRoute
+  '/journal': typeof JournalRoute
+  '/vent': typeof VentRoute
+  '/walk': typeof WalkRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/breathe' | '/journal' | '/vent' | '/walk'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/breathe' | '/journal' | '/vent' | '/walk'
+  id: '__root__' | '/' | '/breathe' | '/journal' | '/vent' | '/walk'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BreatheRoute: typeof BreatheRoute
+  JournalRoute: typeof JournalRoute
+  VentRoute: typeof VentRoute
+  WalkRoute: typeof WalkRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/walk': {
+      id: '/walk'
+      path: '/walk'
+      fullPath: '/walk'
+      preLoaderRoute: typeof WalkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/vent': {
+      id: '/vent'
+      path: '/vent'
+      fullPath: '/vent'
+      preLoaderRoute: typeof VentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/journal': {
+      id: '/journal'
+      path: '/journal'
+      fullPath: '/journal'
+      preLoaderRoute: typeof JournalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/breathe': {
+      id: '/breathe'
+      path: '/breathe'
+      fullPath: '/breathe'
+      preLoaderRoute: typeof BreatheRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,6 +121,10 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BreatheRoute: BreatheRoute,
+  JournalRoute: JournalRoute,
+  VentRoute: VentRoute,
+  WalkRoute: WalkRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
