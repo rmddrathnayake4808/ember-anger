@@ -59,11 +59,23 @@ function Home() {
             <h1 className="font-display font-bold text-ink text-xl">{name}</h1>
           </div>
         </div>
-        <div className="bg-flow-soft border border-flow/25 rounded-full px-3.5 py-2 flex items-center gap-2">
-          <div className="size-2 rounded-full bg-flow" />
-          <span className="text-xs font-bold text-flow tabular-nums">
-            {streak} Day{streak === 1 ? "" : "s"} Flow
-          </span>
+        <div className="flex items-center gap-2">
+          <div className="bg-flow-soft border border-flow/25 rounded-full px-3.5 py-2 flex items-center gap-2">
+            <div className="size-2 rounded-full bg-flow" />
+            <span className="text-xs font-bold text-flow tabular-nums">
+              {streak} Day{streak === 1 ? "" : "s"}
+            </span>
+          </div>
+          <Link
+            to="/settings"
+            className="size-10 rounded-full bg-sand-50 border border-sand-200/60 flex items-center justify-center text-ink-light hover:text-ink active:scale-95 transition-all"
+            aria-label="Settings"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="size-5">
+              <circle cx="12" cy="12" r="3" />
+              <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z" />
+            </svg>
+          </Link>
         </div>
       </header>
 
