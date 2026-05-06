@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import iconUrl from "@/assets/ember-app-icon.png";
 
 export function WelcomeSplash() {
   const [show, setShow] = useState(true);
@@ -29,11 +30,13 @@ export function WelcomeSplash() {
         fade ? "opacity-0" : "opacity-100"
       }`}
     >
-      <div className="size-24 rounded-[28px] bg-sand-50/95 flex items-center justify-center shadow-[0_20px_60px_-10px_oklch(0_0_0/0.5)] animate-[breathe-in_1.2s_ease-out]">
-        <span className="font-display font-extrabold text-4xl bg-linear-to-br from-clay to-flow bg-clip-text text-transparent">
-          E
-        </span>
-      </div>
+      <img
+        src={iconUrl}
+        alt="Ember"
+        width={112}
+        height={112}
+        className="size-28 rounded-[28px] shadow-[0_20px_60px_-10px_oklch(0_0_0/0.5)] animate-[breathe-in_1.2s_ease-out]"
+      />
       <h1 className="mt-6 font-display font-extrabold text-3xl text-sand-50 tracking-tight">
         Ember
       </h1>
