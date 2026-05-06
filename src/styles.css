@@ -58,17 +58,17 @@
 :root {
   --radius: 1.25rem;
 
-  /* Tactile Clay palette in oklch */
-  --sand-50: oklch(0.985 0.006 40);
-  --sand-100: oklch(0.96 0.01 40);
-  --sand-200: oklch(0.9 0.018 40);
-  --sand-300: oklch(0.82 0.025 40);
-  --clay: oklch(0.585 0.135 38);
-  --clay-dark: oklch(0.46 0.12 38);
-  --ink: oklch(0.32 0.03 30);
-  --ink-light: oklch(0.5 0.025 30);
-  --flow: oklch(0.55 0.045 145);
-  --flow-soft: oklch(0.55 0.045 145 / 0.18);
+  /* Bold Red & Blue palette in oklch */
+  --sand-50: oklch(0.99 0.005 250);
+  --sand-100: oklch(0.97 0.012 250);
+  --sand-200: oklch(0.92 0.025 250);
+  --sand-300: oklch(0.82 0.04 250);
+  --clay: oklch(0.58 0.22 25);          /* vivid red */
+  --clay-dark: oklch(0.45 0.2 25);
+  --ink: oklch(0.28 0.12 260);          /* deep navy */
+  --ink-light: oklch(0.5 0.1 260);
+  --flow: oklch(0.55 0.2 255);          /* electric blue */
+  --flow-soft: oklch(0.55 0.2 255 / 0.15);
 
   --background: var(--sand-100);
   --foreground: var(--ink);
@@ -102,19 +102,19 @@
 }
 
 .dark {
-  /* Warm clay night palette */
-  --sand-50: oklch(0.32 0.018 30);
-  --sand-100: oklch(0.24 0.015 30);
-  --sand-200: oklch(0.3 0.018 30);
-  --sand-300: oklch(0.4 0.02 30);
-  --clay: oklch(0.65 0.13 38);
-  --clay-dark: oklch(0.5 0.12 38);
-  --ink: oklch(0.94 0.012 40);
-  --ink-light: oklch(0.78 0.015 30);
-  --flow: oklch(0.72 0.06 145);
-  --flow-soft: oklch(0.72 0.06 145 / 0.18);
+  /* Midnight red & blue palette */
+  --sand-50: oklch(0.26 0.04 260);
+  --sand-100: oklch(0.2 0.035 260);
+  --sand-200: oklch(0.32 0.05 260);
+  --sand-300: oklch(0.42 0.06 260);
+  --clay: oklch(0.68 0.22 25);
+  --clay-dark: oklch(0.52 0.2 25);
+  --ink: oklch(0.96 0.01 250);
+  --ink-light: oklch(0.8 0.03 250);
+  --flow: oklch(0.7 0.18 255);
+  --flow-soft: oklch(0.7 0.18 255 / 0.2);
 
-  --background: oklch(0.18 0.012 30);
+  --background: oklch(0.16 0.04 260);
   --foreground: var(--ink);
   --card: var(--sand-50);
   --card-foreground: var(--ink);
