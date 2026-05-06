@@ -44,7 +44,8 @@ function SignUp() {
     if (data.session) {
       navigate({ to: "/" });
     } else {
-      setInfo("Check your inbox to confirm your email, then sign in.");
+      setInfo("We sent a 6-digit code to your email.");
+      navigate({ to: "/verify", search: { email } });
     }
   };
 
