@@ -1,8 +1,9 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import { storage } from "@/lib/storage";
 import { useSystemTheme } from "@/hooks/use-system-theme";
+import { useAuth } from "@/lib/auth-context";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -24,6 +25,11 @@ const TENSION_MESSAGES = [
 
 function Home() {
   useSystemTheme();
+  const navigate = useNavigate();
+  const { user, loading } = useAuth();
+  useEffect(() => {
+    if (!loading && !user) navigate({ to: "/signin" });
+  }, [loading, user, navigate]);
   const [tension, setTension] = useState(5);
   const [streak, setStreak] = useState(0);
   const [name, setName] = useState("friend");
