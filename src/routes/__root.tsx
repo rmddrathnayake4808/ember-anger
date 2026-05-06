@@ -1,5 +1,6 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import { AuthProvider } from "@/lib/auth-context";
+import { WelcomeSplash } from "@/components/WelcomeSplash";
 
 import appCss from "../styles.css?url";
 
@@ -74,6 +75,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
 function RootComponent() {
   return (
     <AuthProvider>
+      <WelcomeSplash />
       <Outlet />
     </AuthProvider>
   );
