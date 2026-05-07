@@ -153,3 +153,8 @@
 .animate-breathe-in { animation: breathe-in 4s ease-in-out forwards; }
 .animate-breathe-hold { animation: breathe-hold 4s ease-in-out forwards; }
 .animate-breathe-out { animation: breathe-out 4s ease-in-out forwards; }
+
+@keyframes loading-slide {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(400%); }
+}
