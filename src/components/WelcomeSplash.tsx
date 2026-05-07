@@ -43,6 +43,14 @@ export function WelcomeSplash() {
       <p className="mt-2 text-sm text-sand-50/80 font-medium">
         A gentle space for anger
       </p>
+      <div className="mt-8 flex flex-col items-center gap-3" role="status" aria-label="Loading">
+        <div className="h-1.5 w-40 overflow-hidden rounded-full bg-sand-50/15">
+          <div className="h-full w-1/3 rounded-full bg-sand-50 animate-[loading-slide_1.1s_ease-in-out_infinite]" />
+        </div>
+        <span className="text-xs font-bold uppercase tracking-[0.2em] text-sand-50/70">
+          Loading…
+        </span>
+      </div>
     </div>
   );
 }
