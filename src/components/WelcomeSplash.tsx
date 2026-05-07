@@ -51,5 +51,6 @@ export function WelcomeSplash() {
           Loading…
         </span>
       </div>
+    </div>
   );
 }
