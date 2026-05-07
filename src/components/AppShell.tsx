@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { type ReactNode } from "react";
+import { BottomNav } from "@/components/BottomNav";
 
 export function AppShell({ children, title, back = true }: { children: ReactNode; title?: string; back?: boolean }) {
   return (
@@ -24,10 +25,8 @@ export function AppShell({ children, title, back = true }: { children: ReactNode
             <span className="size-10" />
           </div>
         )}
-        {children}
-        <div className="absolute bottom-0 inset-x-0 h-8 bg-linear-to-t from-sand-100 to-transparent pointer-events-none flex justify-center pb-2">
-          <div className="w-1/3 h-1.5 bg-sand-300 rounded-full" />
-        </div>
+        <div className="flex-1 flex flex-col min-h-0">{children}</div>
+        <BottomNav />
       </div>
     </div>
   );
