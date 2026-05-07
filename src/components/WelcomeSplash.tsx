@@ -11,11 +11,11 @@ export function WelcomeSplash() {
       setShow(false);
       return;
     }
-    const fadeT = setTimeout(() => setFade(true), 2600);
+    const fadeT = setTimeout(() => setFade(true), 900);
     const hideT = setTimeout(() => {
       setShow(false);
       sessionStorage.setItem("ac_splash_seen", "1");
-    }, 3000);
+    }, 1300);
     return () => {
       clearTimeout(fadeT);
       clearTimeout(hideT);
