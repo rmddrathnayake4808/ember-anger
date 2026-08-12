@@ -38,6 +38,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signOut = async () => {
     await supabase.auth.signOut();
+    // Prevent cross-user data leakage on shared devices
+    storage.clearAll();
     setSession(null);
   };
 

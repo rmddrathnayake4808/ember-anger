@@ -2,12 +2,14 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import { storage } from "@/lib/storage";
+import { useRequireAuth } from "@/hooks/use-require-auth";
 
 export const Route = createFileRoute("/journal")({
   component: Journal,
 });
 
 function Journal() {
+  useRequireAuth();
   const [text, setText] = useState("");
   const [shredding, setShredding] = useState(false);
   const [shredded, setShredded] = useState(false);

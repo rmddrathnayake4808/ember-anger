@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { AppShell } from "@/components/AppShell";
+import { useRequireAuth } from "@/hooks/use-require-auth";
 
 export const Route = createFileRoute("/walk")({
   component: Walk,
