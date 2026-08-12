@@ -35,6 +35,8 @@ function Vent() {
   useEffect(() => () => stop(), []);
 
   const start = async () => {
+    // Never request microphone access before auth is confirmed
+    if (loading || !user) return;
     setError(null);
     setReleased(false);
     setSeconds(0);
