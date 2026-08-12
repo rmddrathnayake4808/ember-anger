@@ -22,6 +22,7 @@ const PROMPTS = [
 ];
 
 function Walk() {
+  useRequireAuth();
   const [seconds, setSeconds] = useState(0);
   const [running, setRunning] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
