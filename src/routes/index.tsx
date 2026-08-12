@@ -127,9 +127,10 @@ function Home() {
           </h3>
           <div className="grid grid-cols-2 gap-4">
             <ChannelCard to="/breathe" label={["Box", "Breathe"]} sub="2 min grounding" letter="B" tone="flow" />
-            <ChannelCard to="/vent" label={["Voice", "Dump"]} sub="Audio uncensored" letter="V" tone="clay" />
-            <ChannelCard to="/journal" label={["Shred", "Thoughts"]} sub="Write & destroy" letter="S" tone="ink" />
-            <ChannelCard to="/walk" label={["Brisk", "Walk"]} sub="Burn the energy" letter="M" tone="sand" />
+            <ChannelCard to="/face" label={["Face", "Check"]} sub="Rank your emotions" letter="F" tone="clay" />
+            <ChannelCard to="/vent" label={["Voice", "Dump"]} sub="Audio uncensored" letter="V" tone="ink" />
+            <ChannelCard to="/journal" label={["Shred", "Thoughts"]} sub="Write & destroy" letter="S" tone="sand" />
+            <ChannelCard to="/walk" label={["Brisk", "Walk"]} sub="Burn the energy" letter="M" tone="flow" />
           </div>
         </section>
 

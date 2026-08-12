@@ -16,6 +16,7 @@ import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SigninRouteImport } from './routes/signin'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as JournalRouteImport } from './routes/journal'
+import { Route as FaceRouteImport } from './routes/face'
 import { Route as BreatheRouteImport } from './routes/breathe'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -54,6 +55,11 @@ const JournalRoute = JournalRouteImport.update({
   path: '/journal',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FaceRoute = FaceRouteImport.update({
+  id: '/face',
+  path: '/face',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BreatheRoute = BreatheRouteImport.update({
   id: '/breathe',
   path: '/breathe',
@@ -68,6 +74,7 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/breathe': typeof BreatheRoute
+  '/face': typeof FaceRoute
   '/journal': typeof JournalRoute
   '/settings': typeof SettingsRoute
   '/signin': typeof SigninRoute
@@ -79,6 +86,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/breathe': typeof BreatheRoute
+  '/face': typeof FaceRoute
   '/journal': typeof JournalRoute
   '/settings': typeof SettingsRoute
   '/signin': typeof SigninRoute
@@ -91,6 +99,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/breathe': typeof BreatheRoute
+  '/face': typeof FaceRoute
   '/journal': typeof JournalRoute
   '/settings': typeof SettingsRoute
   '/signin': typeof SigninRoute
@@ -104,6 +113,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/breathe'
+    | '/face'
     | '/journal'
     | '/settings'
     | '/signin'
@@ -115,6 +125,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/breathe'
+    | '/face'
     | '/journal'
     | '/settings'
     | '/signin'
@@ -126,6 +137,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/breathe'
+    | '/face'
     | '/journal'
     | '/settings'
     | '/signin'
@@ -138,6 +150,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BreatheRoute: typeof BreatheRoute
+  FaceRoute: typeof FaceRoute
   JournalRoute: typeof JournalRoute
   SettingsRoute: typeof SettingsRoute
   SigninRoute: typeof SigninRoute
@@ -198,6 +211,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JournalRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/face': {
+      id: '/face'
+      path: '/face'
+      fullPath: '/face'
+      preLoaderRoute: typeof FaceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/breathe': {
       id: '/breathe'
       path: '/breathe'
@@ -218,6 +238,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BreatheRoute: BreatheRoute,
+  FaceRoute: FaceRoute,
   JournalRoute: JournalRoute,
   SettingsRoute: SettingsRoute,
   SigninRoute: SigninRoute,
