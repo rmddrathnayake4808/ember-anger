@@ -67,4 +67,11 @@ export const storage = {
   clearJournal() {
     localStorage.setItem(KEYS.journal, "[]");
   },
+  /** Wipe all locally cached personal data (used on sign-out / shared devices). */
+  clearAll() {
+    if (typeof window === "undefined") return;
+    for (const key of Object.values(KEYS)) {
+      localStorage.removeItem(key);
+    }
+  },
 };

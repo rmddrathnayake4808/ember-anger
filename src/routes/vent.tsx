@@ -1,12 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { AppShell } from "@/components/AppShell";
+import { useRequireAuth } from "@/hooks/use-require-auth";
 
 export const Route = createFileRoute("/vent")({
   component: Vent,
 });
 
 function Vent() {
+  const { user, loading } = useRequireAuth();
   const [recording, setRecording] = useState(false);
   const [seconds, setSeconds] = useState(0);
   const [bars, setBars] = useState<number[]>(Array(24).fill(0.2));
@@ -33,6 +35,8 @@ function Vent() {
   useEffect(() => () => stop(), []);
 
   const start = async () => {
+    // Never request microphone access before auth is confirmed
+    if (loading || !user) return;
     setError(null);
     setReleased(false);
     setSeconds(0);

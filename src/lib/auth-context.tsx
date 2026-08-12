@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import type { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
+import { storage } from "@/lib/storage";
 
 type AuthCtx = {
   user: User | null;
@@ -37,6 +38,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signOut = async () => {
     await supabase.auth.signOut();
+    // Prevent cross-user data leakage on shared devices
+    storage.clearAll();
     setSession(null);
   };
 

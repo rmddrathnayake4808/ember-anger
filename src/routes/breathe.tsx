@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { AppShell } from "@/components/AppShell";
+import { useRequireAuth } from "@/hooks/use-require-auth";
 
 export const Route = createFileRoute("/breathe")({
   component: Breathe,
@@ -17,6 +18,7 @@ const PHASE_NEXT: Record<Phase, Phase> = { in: "hold1", hold1: "out", out: "hold
 const SECONDS = 4;
 
 function Breathe() {
+  useRequireAuth();
   const [running, setRunning] = useState(false);
   const [phase, setPhase] = useState<Phase>("in");
   const [count, setCount] = useState(SECONDS);
