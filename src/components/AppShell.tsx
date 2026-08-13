@@ -5,7 +5,7 @@ import { BottomNav } from "@/components/BottomNav";
 export function AppShell({ children, title, back = true }: { children: ReactNode; title?: string; back?: boolean }) {
   return (
     <div className="min-h-dvh w-full bg-sand-200 flex justify-center px-4 py-6 sm:py-10">
-      <div className="w-full max-w-[440px] bg-sand-100 rounded-[40px] sm:rounded-[48px] ring-[10px] sm:ring-[12px] ring-sand-50/60 overflow-hidden flex flex-col min-h-[calc(100dvh-3rem)] sm:min-h-[860px] relative shadow-[0_30px_60px_-20px_oklch(0.32_0.03_30/0.25)]">
+      <div className="w-full max-w-[440px] bg-sand-100 rounded-[40px] sm:rounded-[48px] ring-[10px] sm:ring-[12px] ring-ink/10 overflow-hidden flex flex-col min-h-[calc(100dvh-3rem)] sm:min-h-[860px] relative shadow-[0_30px_60px_-20px_oklch(0.22_0.06_250/0.35)]">
         {(title || back) && (
           <div className="flex items-center justify-between px-6 pt-8 pb-4 shrink-0">
             {back ? (
