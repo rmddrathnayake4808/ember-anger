@@ -1,11 +1,28 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { Wind, MessageSquare, Trash2, Footprints, ScanFace, Zap } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { storage } from "@/lib/storage";
 import { useSystemTheme } from "@/hooks/use-system-theme";
 import { useAuth } from "@/lib/auth-context";
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Ember — Track tension & channel anger calmly" },
+      {
+        name: "description",
+        content:
+          "Check your tension level, then breathe, vent, shred thoughts, walk, or read your face to release anger safely.",
+      },
+      { property: "og:title", content: "Ember — Track tension & channel anger calmly" },
+      {
+        property: "og:description",
+        content:
+          "Check your tension level, then breathe, vent, shred thoughts, walk, or read your face to release anger safely.",
+      },
+    ],
+  }),
   component: Home,
 });
 
@@ -40,7 +57,7 @@ function Home() {
     setStreak(storage.getStreak());
     setName(storage.getName());
     const h = new Date().getHours();
-    setGreeting(h < 12 ? "Morning" : h < 18 ? "Afternoon" : "Evening");
+    setGreeting(h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening");
   }, []);
 
   const onTensionChange = (v: number) => {
@@ -53,38 +70,37 @@ function Home() {
 
   return (
     <AppShell back={false}>
-      <header className="flex items-center justify-between px-7 pt-10 pb-4 shrink-0">
-        <div className="flex items-center gap-3">
-          <div className="size-12 rounded-full bg-clay/15 border border-clay/20 flex items-center justify-center">
-            <span className="font-display font-bold text-clay text-lg">
-              {name.charAt(0).toUpperCase()}
+      <div className="flex-1 overflow-y-auto px-6 pt-10 pb-8 flex flex-col gap-6">
+        <header className="flex items-start justify-between">
+          <div>
+            <h1 className="font-display font-bold text-clay text-3xl tracking-tight">
+              {greeting}, {name}
+            </h1>
+            <p className="text-sm font-medium text-ink-light mt-1">
+              Take a breath. You are in control.
+            </p>
+          </div>
+          <div className="bg-flow-soft border border-flow/30 rounded-full px-3 py-1.5 flex items-center gap-2 shrink-0 mt-1">
+            <span className="size-1.5 rounded-full bg-flow" />
+            <span className="text-xs font-semibold text-flow tabular-nums">{streak}d</span>
+          </div>
+        </header>
+
+        {/* Tension hero */}
+        <section className="bg-sand-50/70 border border-clay/20 rounded-[28px] p-6 backdrop-blur-md shadow-[var(--shadow-inset-soft)]">
+          <div className="flex justify-between items-end mb-4">
+            <h2 className="text-xs font-semibold uppercase tracking-[0.16em] text-ink-light">
+              Tension Level
+            </h2>
+            <span className="font-display font-bold text-clay text-4xl leading-none tabular-nums">
+              {tension}
             </span>
           </div>
-          <div className="flex flex-col">
-            <span className="text-sm font-medium text-ink-light">{greeting},</span>
-            <h1 className="font-display font-bold text-ink text-xl">{name}</h1>
-          </div>
-        </div>
-        <div className="bg-flow-soft border border-flow/25 rounded-full px-3.5 py-2 flex items-center gap-2">
-          <div className="size-2 rounded-full bg-flow" />
-          <span className="text-xs font-bold text-flow tabular-nums">
-            {streak} Day{streak === 1 ? "" : "s"}
-          </span>
-        </div>
-      </header>
 
-      <div className="flex-1 overflow-y-auto px-6 pb-16 flex flex-col gap-7">
-        {/* Tension */}
-        <section className="bg-sand-50 rounded-[32px] p-6 border border-sand-200/60 shadow-[var(--shadow-inset-soft)]">
-          <div className="flex justify-between items-end mb-5">
-            <h2 className="font-display font-bold text-ink text-lg">Current Tension</h2>
-            <span className="text-sm font-bold text-clay tabular-nums">Level {tension}</span>
-          </div>
-
-          <div className="relative h-14 bg-sand-200 rounded-full p-2 flex items-center shadow-[inset_0_4px_8px_oklch(0.32_0.03_30/0.06)]">
+          <div className="relative h-9 rounded-full bg-sand-200/70 border border-clay/25 flex items-center px-1 shadow-[inset_0_2px_10px_oklch(0.22_0.06_250/0.2)]">
             <div
-              className="absolute left-2 top-2 bottom-2 bg-clay rounded-full transition-all duration-300 shadow-[0_2px_10px_oklch(0.585_0.135_38/0.35)]"
-              style={{ width: `calc(${fillPct}% - 1rem)` }}
+              className="absolute left-1 top-1 bottom-1 rounded-full bg-linear-to-r from-flow to-clay transition-all duration-300 shadow-[0_0_16px_var(--flow-soft)]"
+              style={{ width: `calc(${fillPct}% - 0.5rem)` }}
             />
             <input
               type="range"
@@ -96,93 +112,82 @@ function Home() {
               aria-label="Tension level"
             />
             <div
-              className="absolute size-10 bg-sand-50 rounded-full border-4 border-clay shadow-[0_4px_12px_oklch(0.32_0.03_30/0.18)] z-10 transition-all duration-300 pointer-events-none"
-              style={{ left: `calc(${fillPct}% - 1.25rem - 0.25rem + 0.25rem)`, top: "0.5rem" }}
+              className="absolute size-8 rounded-full bg-sand-50 border-4 border-clay z-10 transition-all duration-300 pointer-events-none shadow-[var(--shadow-soft)]"
+              style={{ left: `calc(${fillPct}% - 1rem)` }}
             />
           </div>
-          <p className="mt-5 text-sm font-medium text-ink-light text-center text-pretty">
-            {TENSION_MESSAGES[tension]}
+
+          <p className="mt-4 text-xs leading-relaxed italic text-clay text-pretty">
+            Grounding: {TENSION_MESSAGES[tension]}
           </p>
         </section>
 
-        {/* Primary Action */}
-        <section className="px-1">
+        {/* Primary CTA */}
+        <Link
+          to="/breathe"
+          className="w-full bg-clay rounded-[20px] py-5 flex items-center justify-center gap-3 shadow-[var(--shadow-press)] transition-transform duration-150 active:translate-y-2 active:shadow-[var(--shadow-press-active)]"
+        >
+          <span className="font-display font-bold text-lg uppercase tracking-[0.12em] text-primary-foreground">
+            I need an outlet
+          </span>
+          <Zap className="size-5 text-primary-foreground" strokeWidth={2.5} />
+        </Link>
+
+        {/* Channel grid */}
+        <div className="grid grid-cols-2 gap-4">
           <Link
             to="/breathe"
-            className="block w-full bg-clay text-sand-50 rounded-[36px] pt-7 pb-9 px-6 shadow-[var(--shadow-press)] flex flex-col items-center justify-center gap-3 transform transition-all duration-150 hover:brightness-105 active:translate-y-3 active:shadow-[var(--shadow-press-active)]"
+            className="col-span-2 rounded-[28px] p-5 border border-clay/25 bg-linear-to-br from-sand-50 to-sand-100 min-h-[140px] flex flex-col justify-between active:scale-[0.98] transition-transform"
           >
-            <span className="font-display font-extrabold text-2xl sm:text-3xl tracking-tight">
-              I need an outlet
+            <span className="size-10 rounded-xl bg-flow-soft text-flow flex items-center justify-center">
+              <Wind className="size-6" />
             </span>
-            <span className="text-sm font-medium text-sand-50/85 bg-clay-dark/35 px-4 py-1.5 rounded-full">
-              Start guided release
+            <span>
+              <span className="block font-display font-bold text-ink text-xl">Breathe</span>
+              <span className="block text-xs text-ink-light">Guided rhythmic release</span>
             </span>
           </Link>
-        </section>
 
-        {/* Channels */}
-        <section>
-          <h3 className="text-xs font-bold text-ink-light uppercase tracking-[0.15em] mb-4 px-2">
-            Quick Channels
-          </h3>
-          <div className="grid grid-cols-2 gap-4">
-            <ChannelCard to="/breathe" label={["Box", "Breathe"]} sub="2 min grounding" letter="B" tone="flow" />
-            <ChannelCard to="/face" label={["Face", "Check"]} sub="Rank your emotions" letter="F" tone="clay" />
-            <ChannelCard to="/vent" label={["Voice", "Dump"]} sub="Audio uncensored" letter="V" tone="ink" />
-            <ChannelCard to="/journal" label={["Shred", "Thoughts"]} sub="Write & destroy" letter="S" tone="sand" />
-            <ChannelCard to="/walk" label={["Brisk", "Walk"]} sub="Burn the energy" letter="M" tone="flow" />
-          </div>
-        </section>
+          <Tile to="/vent" label="Vent" icon={<MessageSquare className="size-5" />} tone="text-flow bg-flow-soft" />
+          <Tile to="/journal" label="Shred" icon={<Trash2 className="size-5" />} tone="text-destructive bg-destructive/15" />
+          <Tile to="/walk" label="Walk" icon={<Footprints className="size-5" />} tone="text-clay bg-clay/15" />
+          <Tile to="/face" label="Face Check" icon={<ScanFace className="size-5" />} tone="text-ink bg-ink/10" />
+        </div>
 
-        <section className="bg-sand-50 rounded-[28px] p-5 border border-sand-200/60 flex items-start gap-4">
-          <div className="size-10 rounded-full bg-flow-soft text-flow flex items-center justify-center font-display font-bold shrink-0">
+        <section className="rounded-[24px] p-5 border border-clay/20 bg-sand-50/60 flex items-start gap-4">
+          <span className="size-9 rounded-full bg-flow-soft text-flow flex items-center justify-center font-display font-bold shrink-0">
             ✓
-          </div>
-          <div className="flex flex-col gap-1">
-            <p className="font-display font-bold text-ink text-sm">You showed up today.</p>
-            <p className="text-xs text-ink-light text-pretty">
+          </span>
+          <span>
+            <span className="block font-display font-bold text-ink text-sm">You showed up today.</span>
+            <span className="block text-xs text-ink-light text-pretty mt-1">
               Awareness is the first release. Each check-in builds a steadier you.
-            </p>
-          </div>
+            </span>
+          </span>
         </section>
       </div>
     </AppShell>
   );
 }
 
-function ChannelCard({
+function Tile({
   to,
   label,
-  sub,
-  letter,
+  icon,
   tone,
 }: {
   to: string;
-  label: [string, string];
-  sub: string;
-  letter: string;
-  tone: "flow" | "clay" | "ink" | "sand";
+  label: string;
+  icon: React.ReactNode;
+  tone: string;
 }) {
-  const tones: Record<typeof tone, string> = {
-    flow: "bg-flow-soft text-flow",
-    clay: "bg-clay/15 text-clay",
-    ink: "bg-ink/10 text-ink",
-    sand: "bg-sand-300/40 text-ink-light",
-  };
   return (
     <Link
       to={to}
-      className="bg-sand-50 rounded-[28px] p-5 border border-sand-200/50 flex flex-col gap-7 active:scale-95 transition-transform shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-card)]"
+      className="bg-sand-50/60 p-5 rounded-[28px] border border-clay/20 flex flex-col gap-4 active:scale-95 transition-transform"
     >
-      <div className={`size-10 rounded-full flex items-center justify-center font-display font-bold text-base ${tones[tone]}`}>
-        {letter}
-      </div>
-      <div>
-        <h4 className="font-display font-bold text-ink text-balance leading-tight">
-          {label[0]}<br />{label[1]}
-        </h4>
-        <p className="text-xs text-ink-light mt-1">{sub}</p>
-      </div>
+      <span className={`size-9 rounded-lg flex items-center justify-center ${tone}`}>{icon}</span>
+      <span className="font-display font-bold text-ink text-lg">{label}</span>
     </Link>
   );
 }
