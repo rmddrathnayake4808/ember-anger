@@ -59,6 +59,29 @@ export const Route = createRootRoute({
         href: appCss,
       },
     ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "Ember",
+          url: "https://ember-anger.lovable.app",
+          description:
+            "Track tension, breathe through triggers, vent privately, and journal to understand anger. Ember turns intense moments into calm action.",
+          publisher: {
+            "@type": "Organization",
+            name: "Ember",
+            url: "https://ember-anger.lovable.app",
+            logo: {
+              "@type": "ImageObject",
+              url: "https://ember-anger.lovable.app/apple-touch-icon.png",
+            },
+          },
+        }),
+      },
+    ],
+
   }),
   shellComponent: RootShell,
   component: RootComponent,
