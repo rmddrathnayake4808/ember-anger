@@ -73,13 +73,17 @@ function Home() {
       <div className="flex-1 overflow-y-auto px-6 pt-10 pb-8 flex flex-col gap-6">
         <header className="flex items-start justify-between">
           <div>
-            <h1 className="font-display font-bold text-clay text-3xl tracking-tight">
+            <p className="text-sm font-semibold text-flow">
               {greeting}, {name}
+            </p>
+            <h1 className="font-display font-bold text-clay text-3xl tracking-tight mt-1">
+              Ember — your space for anger release
             </h1>
             <p className="text-sm font-medium text-ink-light mt-1">
               Take a breath. You are in control.
             </p>
           </div>
+
           <div className="bg-flow-soft border border-flow/30 rounded-full px-3 py-1.5 flex items-center gap-2 shrink-0 mt-1">
             <span className="size-1.5 rounded-full bg-flow" />
             <span className="text-xs font-semibold text-flow tabular-nums">{streak}d</span>

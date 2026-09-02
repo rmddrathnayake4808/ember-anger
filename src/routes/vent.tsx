@@ -5,7 +5,18 @@ import { useRequireAuth } from "@/hooks/use-require-auth";
 
 export const Route = createFileRoute("/vent")({
   component: Vent,
+  head: () => ({
+    meta: [
+      { title: "Voice Vent — Ember: release anger calmly" },
+      { name: "description", content: "Say what you need out loud and watch it fade. Ember's voice vent records nothing, so you can release anger privately and calmly." },
+      { property: "og:title", content: "Voice Vent — Ember: release anger calmly" },
+      { property: "og:description", content: "Say what you need out loud and watch it fade. Ember's voice vent records nothing, so you can release anger privately and calmly." },
+      { property: "og:url", content: "https://ember-anger.lovable.app/vent" },
+    ],
+    links: [{ rel: "canonical", href: "https://ember-anger.lovable.app/vent" }],
+  }),
 });
+
 
 function Vent() {
   const { user, loading } = useRequireAuth();

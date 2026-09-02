@@ -5,7 +5,18 @@ import { useRequireAuth } from "@/hooks/use-require-auth";
 
 export const Route = createFileRoute("/breathe")({
   component: Breathe,
+  head: () => ({
+    meta: [
+      { title: "Box Breathing — Ember: release anger calmly" },
+      { name: "description", content: "Follow a guided 4-4-4-4 box breathing session to slow your heart rate and release anger calmly in the moment." },
+      { property: "og:title", content: "Box Breathing — Ember: release anger calmly" },
+      { property: "og:description", content: "Follow a guided 4-4-4-4 box breathing session to slow your heart rate and release anger calmly in the moment." },
+      { property: "og:url", content: "https://ember-anger.lovable.app/breathe" },
+    ],
+    links: [{ rel: "canonical", href: "https://ember-anger.lovable.app/breathe" }],
+  }),
 });
+
 
 type Phase = "in" | "hold1" | "out" | "hold2";
 const PHASE_LABEL: Record<Phase, string> = {
