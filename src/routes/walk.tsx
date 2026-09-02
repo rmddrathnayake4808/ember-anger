@@ -5,7 +5,18 @@ import { useRequireAuth } from "@/hooks/use-require-auth";
 
 export const Route = createFileRoute("/walk")({
   component: Walk,
+  head: () => ({
+    meta: [
+      { title: "Mindful Walk — Ember: release anger calmly" },
+      { name: "description", content: "Take a 10-minute guided mindful walk with sensory prompts to burn off adrenaline and release anger calmly through movement." },
+      { property: "og:title", content: "Mindful Walk — Ember: release anger calmly" },
+      { property: "og:description", content: "Take a 10-minute guided mindful walk with sensory prompts to burn off adrenaline and release anger calmly through movement." },
+      { property: "og:url", content: "https://ember-anger.lovable.app/walk" },
+    ],
+    links: [{ rel: "canonical", href: "https://ember-anger.lovable.app/walk" }],
+  }),
 });
+
 
 const TOTAL = 10 * 60; // 10 minutes
 const PROMPTS = [
