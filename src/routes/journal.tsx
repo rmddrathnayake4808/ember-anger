@@ -6,7 +6,18 @@ import { useRequireAuth } from "@/hooks/use-require-auth";
 
 export const Route = createFileRoute("/journal")({
   component: Journal,
+  head: () => ({
+    meta: [
+      { title: "Shred Thoughts — Ember: release anger calmly" },
+      { name: "description", content: "Write down what set you off, then shred it or keep it. Journaling in Ember helps you understand anger and release it calmly." },
+      { property: "og:title", content: "Shred Thoughts — Ember: release anger calmly" },
+      { property: "og:description", content: "Write down what set you off, then shred it or keep it. Journaling in Ember helps you understand anger and release it calmly." },
+      { property: "og:url", content: "https://ember-anger.lovable.app/journal" },
+    ],
+    links: [{ rel: "canonical", href: "https://ember-anger.lovable.app/journal" }],
+  }),
 });
+
 
 function Journal() {
   useRequireAuth();
