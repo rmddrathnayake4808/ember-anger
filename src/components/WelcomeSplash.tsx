@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import iconUrl from "@/assets/ember-app-icon.png";
+import iconUrl from "@/assets/ember-favicon.png";
 
 export function WelcomeSplash() {
   const [show, setShow] = useState(true);
