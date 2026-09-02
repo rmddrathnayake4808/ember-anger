@@ -9,17 +9,17 @@ import { useAuth } from "@/lib/auth-context";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Ember — Track tension & channel anger calmly" },
+      { title: "Ember — Track tension & release anger calmly" },
       {
         name: "description",
         content:
-          "Check your tension level, then breathe, vent, shred thoughts, walk, or read your face to release anger safely.",
+          "Track tension, breathe through triggers, vent privately, and journal to understand anger. Ember turns intense moments into calm action.",
       },
-      { property: "og:title", content: "Ember — Track tension & channel anger calmly" },
+      { property: "og:title", content: "Ember — Track tension & release anger calmly" },
       {
         property: "og:description",
         content:
-          "Check your tension level, then breathe, vent, shred thoughts, walk, or read your face to release anger safely.",
+          "Track tension, breathe through triggers, vent privately, and journal to understand anger. Ember turns intense moments into calm action.",
       },
     ],
   }),

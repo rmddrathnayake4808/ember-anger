@@ -11,16 +11,17 @@ import type { FaceReading } from "@/lib/emotion.server";
 export const Route = createFileRoute("/face")({
   head: () => ({
     meta: [
-      { title: "Face Check — Ember emotion ranking" },
+      { title: "Face Check — Ember: release anger calmly" },
       {
         name: "description",
         content:
-          "Take a photo and get a gentle ranking of the emotions on your face, plus a tension level for your check-in.",
+          "Track tension, breathe through triggers, vent privately, and journal to understand anger. Ember turns intense moments into calm action.",
       },
-      { property: "og:title", content: "Face Check — Ember emotion ranking" },
+      { property: "og:title", content: "Face Check — Ember: release anger calmly" },
       {
         property: "og:description",
-        content: "Rank the emotions on your face and turn the reading into a calm next step.",
+        content:
+          "Track tension, breathe through triggers, vent privately, and journal to understand anger. Ember turns intense moments into calm action.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
