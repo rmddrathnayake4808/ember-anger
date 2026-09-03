@@ -142,8 +142,8 @@ function Settings() {
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="bg-sand-50 rounded-[28px] p-5 border border-sand-200/60 flex flex-col gap-4">
-      <h2 className="font-display font-bold text-ink text-base">{title}</h2>
+    <section className="bg-sand-50 rounded-[24px] p-4 border border-sand-200/60 flex flex-col gap-3">
+      <h2 className="font-display font-bold text-ink text-sm">{title}</h2>
       {children}
     </section>
   );
@@ -158,10 +158,10 @@ function ThemePreview({ mode }: { mode: ThemeMode }) {
         : { bg: "linear-gradient(135deg,#F2ECE7 50%, #1F1814 50%)", fg: "#B0553B", border: "#E3D9D1" };
   return (
     <div
-      className="aspect-[4/3] rounded-[16px] border flex items-end justify-start p-2"
+      className="aspect-[4/3] rounded-[12px] border flex items-end justify-start p-1.5"
       style={{ background: styles.bg, borderColor: styles.border }}
     >
-      <div className="size-3 rounded-full" style={{ background: styles.fg }} />
+      <div className="size-2.5 rounded-full" style={{ background: styles.fg }} />
     </div>
   );
 }
