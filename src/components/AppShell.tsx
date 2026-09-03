@@ -4,9 +4,9 @@ import { BottomNav } from "@/components/BottomNav";
 
 export function AppShell({ children, title, back = true }: { children: ReactNode; title?: string; back?: boolean }) {
   return (
-    <div className="min-h-dvh w-full bg-sand-100 flex flex-col">
+    <div className="h-dvh w-full bg-sand-100 flex flex-col overflow-hidden">
       {(title || back) && (
-        <div className="flex items-center justify-between px-6 pt-6 pb-4 shrink-0">
+        <div className="flex items-center justify-between px-6 pt-5 pb-3 shrink-0">
           {back ? (
             <Link
               to="/"
