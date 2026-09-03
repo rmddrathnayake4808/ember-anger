@@ -58,34 +58,34 @@ function Settings() {
 
   return (
     <AppShell title="Settings">
-      <div className="flex-1 overflow-y-auto px-6 pb-16 flex flex-col gap-7">
+      <div className="flex-1 px-6 pb-4 flex flex-col gap-3 min-h-0">
         {/* Profile */}
         <Section title="Profile">
-          <div className="flex items-center gap-4">
-            <div className="size-14 rounded-full bg-clay/15 border border-clay/25 flex items-center justify-center">
-              <span className="font-display font-extrabold text-clay text-xl">
+          <div className="flex items-center gap-3">
+            <div className="size-11 rounded-full bg-clay/15 border border-clay/25 flex items-center justify-center">
+              <span className="font-display font-extrabold text-clay text-lg">
                 {(name || user?.email || "?").charAt(0).toUpperCase()}
               </span>
             </div>
             <div className="flex flex-col min-w-0">
-              <span className="font-display font-bold text-ink truncate">{name || "—"}</span>
-              <span className="text-xs text-ink-light truncate">{user?.email}</span>
+              <span className="font-display font-bold text-ink text-sm truncate">{name || "—"}</span>
+              <span className="text-[10px] text-ink-light truncate">{user?.email}</span>
             </div>
           </div>
 
-          <label className="flex flex-col gap-2 mt-2">
-            <span className="text-xs font-bold text-ink-light uppercase tracking-widest">Display name</span>
+          <label className="flex flex-col gap-1.5 mt-1">
+            <span className="text-[10px] font-bold text-ink-light uppercase tracking-widest">Display name</span>
             <div className="flex gap-2">
               <input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Your name"
-                className="flex-1 bg-sand-50 border border-sand-200 rounded-[18px] px-4 py-3 text-ink outline-none focus:border-clay focus:ring-2 focus:ring-clay/20 transition-all"
+                className="flex-1 bg-sand-50 border border-sand-200 rounded-[16px] px-3 py-2.5 text-sm text-ink outline-none focus:border-clay focus:ring-2 focus:ring-clay/20 transition-all"
               />
               <button
                 onClick={saveName}
                 disabled={savingName}
-                className="bg-clay text-sand-50 rounded-[18px] px-5 font-display font-bold active:scale-95 transition-transform disabled:opacity-50"
+                className="bg-clay text-sand-50 rounded-[16px] px-4 text-sm font-display font-bold active:scale-95 transition-transform disabled:opacity-50"
               >
                 {savedFlash ? "✓" : "Save"}
               </button>
@@ -95,15 +95,15 @@ function Settings() {
 
         {/* Theme */}
         <Section title="Appearance">
-          <p className="text-sm text-ink-light text-pretty">
+          <p className="text-xs text-ink-light text-pretty">
             Choose how Ember looks on your device.
           </p>
-          <div className="grid grid-cols-3 gap-2 bg-sand-200/60 p-1.5 rounded-[20px]">
+          <div className="grid grid-cols-3 gap-2 bg-sand-200/60 p-1.5 rounded-[18px]">
             {(["system", "light", "dark"] as ThemeMode[]).map((m) => (
               <button
                 key={m}
                 onClick={() => onTheme(m)}
-                className={`py-3 rounded-[14px] text-sm font-display font-bold capitalize transition-all ${
+                className={`py-2.5 rounded-[12px] text-xs font-display font-bold capitalize transition-all ${
                   theme === m
                     ? "bg-sand-50 text-ink shadow-[0_2px_8px_oklch(0.32_0.03_30/0.1)]"
                     : "text-ink-light hover:text-ink"
@@ -124,13 +124,13 @@ function Settings() {
         <Section title="Account">
           <Link
             to="/"
-            className="block w-full text-center bg-sand-50 text-ink border border-sand-200 rounded-[20px] py-4 font-display font-bold active:scale-[0.98] transition-transform"
+            className="block w-full text-center bg-sand-50 text-ink border border-sand-200 rounded-[18px] py-3 text-sm font-display font-bold active:scale-[0.98] transition-transform"
           >
             Back to Ember
           </Link>
           <button
             onClick={handleSignOut}
-            className="w-full bg-ink text-sand-50 rounded-[20px] py-4 font-display font-bold active:scale-[0.98] transition-transform"
+            className="w-full bg-ink text-sand-50 rounded-[18px] py-3 text-sm font-display font-bold active:scale-[0.98] transition-transform"
           >
             Sign Out
           </button>

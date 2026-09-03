@@ -97,19 +97,17 @@ export function AuthScaffold({
   footer: React.ReactNode;
 }) {
   return (
-    <div className="min-h-dvh w-full bg-sand-200 flex justify-center px-4 py-6 sm:py-10">
-      <div className="w-full max-w-[440px] bg-sand-100 rounded-[40px] sm:rounded-[48px] ring-[10px] sm:ring-[12px] ring-sand-50/60 overflow-hidden flex flex-col min-h-[calc(100dvh-3rem)] sm:min-h-[860px] relative shadow-[0_30px_60px_-20px_oklch(0.32_0.03_30/0.25)]">
-        <div className="flex flex-col flex-1 px-7 pt-12 pb-12 gap-8">
-          <div className="flex flex-col gap-3">
-            <div className="size-14 rounded-2xl bg-clay/15 border border-clay/25 flex items-center justify-center">
-              <span className="font-display font-extrabold text-clay text-2xl">E</span>
-            </div>
-            <h1 className="font-display font-extrabold text-ink text-3xl tracking-tight">{title}</h1>
-            <p className="text-ink-light text-sm">{subtitle}</p>
+    <div className="h-dvh w-full bg-sand-100 flex flex-col overflow-hidden">
+      <div className="flex flex-col flex-1 px-6 pt-10 pb-8 gap-6 min-h-0">
+        <div className="flex flex-col gap-3 shrink-0">
+          <div className="size-12 rounded-2xl bg-clay/15 border border-clay/25 flex items-center justify-center">
+            <span className="font-display font-extrabold text-clay text-2xl">E</span>
           </div>
-          <div className="flex flex-col gap-5 flex-1">{children}</div>
-          <div className="text-center">{footer}</div>
+          <h1 className="font-display font-extrabold text-ink text-2xl tracking-tight">{title}</h1>
+          <p className="text-ink-light text-sm">{subtitle}</p>
         </div>
+        <div className="flex flex-col gap-4 flex-1 min-h-0 overflow-hidden">{children}</div>
+        <div className="text-center shrink-0">{footer}</div>
       </div>
     </div>
   );

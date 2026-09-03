@@ -149,20 +149,20 @@ function FaceCheck() {
 
   return (
     <AppShell title="Face Check">
-      <div className="flex-1 overflow-y-auto px-6 pb-10 flex flex-col gap-6">
-        <section className="bg-sand-50 rounded-[28px] p-5 border border-sand-200/60 flex items-start gap-4">
-          <div className="size-10 rounded-full bg-flow-soft text-flow flex items-center justify-center shrink-0">
-            <ScanFace className="size-5" />
+      <div className="flex-1 px-6 pb-4 flex flex-col gap-3 min-h-0">
+        <section className="bg-sand-50 rounded-[24px] p-4 border border-sand-200/60 flex items-start gap-3">
+          <div className="size-9 rounded-full bg-flow-soft text-flow flex items-center justify-center shrink-0">
+            <ScanFace className="size-4" />
           </div>
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-0.5">
             <h2 className="font-display font-bold text-ink text-sm">Read your expression</h2>
-            <p className="text-xs text-ink-light text-pretty">
-              One photo, ranked emotions, and a tension level you can carry into your check-in. Nothing is stored.
+            <p className="text-[10px] text-ink-light text-pretty leading-snug">
+              One photo, ranked emotions, and a tension level for your check-in. Nothing is stored.
             </p>
           </div>
         </section>
 
-        <div className="relative aspect-square w-full rounded-[32px] overflow-hidden bg-sand-200 border border-sand-200/60 flex items-center justify-center">
+        <div className="relative h-48 w-full rounded-[28px] overflow-hidden bg-sand-200 border border-sand-200/60 flex items-center justify-center shrink-0">
           {cameraOn ? (
             <video
               ref={videoRef}
@@ -174,59 +174,59 @@ function FaceCheck() {
           ) : shot ? (
             <img src={shot} alt="Captured face" className="size-full object-cover" />
           ) : (
-            <div className="flex flex-col items-center gap-3 text-ink-light px-8 text-center">
-              <ScanFace className="size-10 opacity-60" />
-              <p className="text-xs font-medium text-pretty">
-                Face a soft light source and keep your whole face in frame.
+            <div className="flex flex-col items-center gap-2 text-ink-light px-8 text-center">
+              <ScanFace className="size-8 opacity-60" />
+              <p className="text-[10px] font-medium text-pretty">
+                Face a soft light and keep your whole face in frame.
               </p>
             </div>
           )}
           {busy && (
-            <div className="absolute inset-0 bg-ink/45 backdrop-blur-sm flex flex-col items-center justify-center gap-3">
-              <div className="h-1.5 w-32 overflow-hidden rounded-full bg-sand-50/25">
+            <div className="absolute inset-0 bg-ink/45 backdrop-blur-sm flex flex-col items-center justify-center gap-2">
+              <div className="h-1.5 w-28 overflow-hidden rounded-full bg-sand-50/25">
                 <div className="h-full w-1/3 rounded-full bg-sand-50 animate-[loading-slide_1.1s_ease-in-out_infinite]" />
               </div>
-              <span className="text-xs font-bold uppercase tracking-[0.2em] text-sand-50/85">Reading…</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-sand-50/85">Reading…</span>
             </div>
           )}
         </div>
 
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-2 shrink-0">
           {cameraOn ? (
             <button
               type="button"
               onClick={capture}
-              className="w-full bg-clay text-sand-50 rounded-[28px] py-4 font-display font-extrabold text-lg shadow-[var(--shadow-press)] active:translate-y-1 active:shadow-[var(--shadow-press-active)] transition-all flex items-center justify-center gap-2"
+              className="w-full bg-clay text-sand-50 rounded-[24px] py-3.5 font-display font-extrabold text-base shadow-[var(--shadow-press)] active:translate-y-1 active:shadow-[var(--shadow-press-active)] transition-all flex items-center justify-center gap-2"
             >
-              <Camera className="size-5" /> Capture
+              <Camera className="size-4" /> Capture
             </button>
           ) : (
             <button
               type="button"
               onClick={startCamera}
               disabled={busy}
-              className="w-full bg-clay text-sand-50 rounded-[28px] py-4 font-display font-extrabold text-lg shadow-[var(--shadow-press)] active:translate-y-1 active:shadow-[var(--shadow-press-active)] transition-all disabled:opacity-60 flex items-center justify-center gap-2"
+              className="w-full bg-clay text-sand-50 rounded-[24px] py-3.5 font-display font-extrabold text-base shadow-[var(--shadow-press)] active:translate-y-1 active:shadow-[var(--shadow-press-active)] transition-all disabled:opacity-60 flex items-center justify-center gap-2"
             >
-              <Camera className="size-5" /> {shot ? "Retake photo" : "Open camera"}
+              <Camera className="size-4" /> {shot ? "Retake photo" : "Open camera"}
             </button>
           )}
 
-          <div className="flex gap-3">
+          <div className="flex gap-2">
             <button
               type="button"
               onClick={() => fileRef.current?.click()}
               disabled={busy}
-              className="flex-1 bg-sand-50 text-ink rounded-[24px] py-3.5 text-sm font-bold border border-sand-200/60 active:scale-[0.98] transition-transform disabled:opacity-60 flex items-center justify-center gap-2"
+              className="flex-1 bg-sand-50 text-ink rounded-[20px] py-3 text-xs font-bold border border-sand-200/60 active:scale-[0.98] transition-transform disabled:opacity-60 flex items-center justify-center gap-1.5"
             >
-              <Upload className="size-4" /> Upload
+              <Upload className="size-3.5" /> Upload
             </button>
             <button
               type="button"
               onClick={reset}
               disabled={busy}
-              className="flex-1 bg-sand-50 text-ink-light rounded-[24px] py-3.5 text-sm font-bold border border-sand-200/60 active:scale-[0.98] transition-transform disabled:opacity-60 flex items-center justify-center gap-2"
+              className="flex-1 bg-sand-50 text-ink-light rounded-[20px] py-3 text-xs font-bold border border-sand-200/60 active:scale-[0.98] transition-transform disabled:opacity-60 flex items-center justify-center gap-1.5"
             >
-              <RefreshCw className="size-4" /> Reset
+              <RefreshCw className="size-3.5" /> Reset
             </button>
           </div>
           <input
@@ -242,28 +242,28 @@ function FaceCheck() {
         </div>
 
         {error && (
-          <p className="text-xs font-medium text-clay bg-clay/10 border border-clay/20 rounded-2xl px-4 py-3 text-pretty">
+          <p className="text-[10px] font-medium text-clay bg-clay/10 border border-clay/20 rounded-xl px-3 py-2 text-pretty">
             {error}
           </p>
         )}
 
         {reading?.faceDetected && (
-          <section className="bg-sand-50 rounded-[32px] p-6 border border-sand-200/60 flex flex-col gap-5">
-            <div className="flex items-end justify-between">
-              <h3 className="font-display font-bold text-ink text-lg">Emotion ranking</h3>
-              <span className="text-sm font-bold text-clay tabular-nums">Tension {reading.angerLevel}</span>
+          <section className="flex-1 min-h-0 bg-sand-50 rounded-[24px] p-4 border border-sand-200/60 flex flex-col gap-3">
+            <div className="flex items-end justify-between shrink-0">
+              <h3 className="font-display font-bold text-ink text-sm">Emotion ranking</h3>
+              <span className="text-xs font-bold text-clay tabular-nums">Tension {reading.angerLevel}</span>
             </div>
 
-            <ol className="flex flex-col gap-4">
+            <ol className="flex flex-col gap-2 overflow-hidden">
               {reading.ranking.map((row, i) => (
-                <li key={row.emotion} className="flex flex-col gap-1.5">
+                <li key={row.emotion} className="flex flex-col gap-1">
                   <div className="flex items-baseline justify-between">
-                    <span className="text-sm font-bold text-ink capitalize">
+                    <span className="text-xs font-bold text-ink capitalize">
                       {i + 1}. {row.emotion}
                     </span>
-                    <span className="text-xs font-bold text-ink-light tabular-nums">{row.score}%</span>
+                    <span className="text-[10px] font-bold text-ink-light tabular-nums">{row.score}%</span>
                   </div>
-                  <div className="h-2.5 rounded-full bg-sand-200 overflow-hidden">
+                  <div className="h-2 rounded-full bg-sand-200 overflow-hidden">
                     <div
                       className={`h-full rounded-full transition-all duration-500 ${i === 0 ? "bg-clay" : "bg-flow/70"}`}
                       style={{ width: `${Math.max(row.score, 3)}%` }}
@@ -274,7 +274,7 @@ function FaceCheck() {
             </ol>
 
             {reading.note && (
-              <p className="text-sm font-medium text-ink-light text-pretty border-t border-sand-200/60 pt-4">
+              <p className="text-xs font-medium text-ink-light text-pretty border-t border-sand-200/60 pt-2 shrink-0">
                 {reading.note}
               </p>
             )}
@@ -283,7 +283,7 @@ function FaceCheck() {
               type="button"
               onClick={applyToCheckIn}
               disabled={saved}
-              className="w-full bg-ink text-sand-50 rounded-[24px] py-3.5 text-sm font-bold active:scale-[0.98] transition-transform disabled:opacity-70"
+              className="w-full mt-auto bg-ink text-sand-50 rounded-[20px] py-3 text-xs font-bold active:scale-[0.98] transition-transform disabled:opacity-70 shrink-0"
             >
               {saved ? "Saved to today's check-in" : `Set today's tension to ${reading.angerLevel}`}
             </button>
