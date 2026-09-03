@@ -185,10 +185,10 @@ function Tile({
   return (
     <Link
       to={to}
-      className="bg-sand-50/60 p-5 rounded-[28px] border border-clay/20 flex flex-col gap-4 active:scale-95 transition-transform"
+      className="bg-sand-50/60 p-3 rounded-[20px] border border-clay/20 flex flex-col gap-2 active:scale-95 transition-transform"
     >
-      <span className={`size-9 rounded-lg flex items-center justify-center ${tone}`}>{icon}</span>
-      <span className="font-display font-bold text-ink text-lg">{label}</span>
+      <span className={`size-7 rounded-lg flex items-center justify-center ${tone}`}>{icon}</span>
+      <span className="font-display font-bold text-ink text-sm">{label}</span>
     </Link>
   );
 }
