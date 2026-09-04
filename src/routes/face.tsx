@@ -109,7 +109,15 @@ function FaceCheck() {
       setReading(result);
       if (!result.faceDetected) setError("No clear face found. Try better light and face the camera.");
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Something went wrong reading that photo.");
+      if (e instanceof Response) {
+        setError(
+          e.status === 401
+            ? "Your session expired. Please sign in again to run a face check."
+            : `Reading failed (${e.status}). Please try again.`,
+        );
+      } else {
+        setError(e instanceof Error ? e.message : "Something went wrong reading that photo.");
+      }
     } finally {
       setBusy(false);
     }
