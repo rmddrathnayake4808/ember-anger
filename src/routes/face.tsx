@@ -311,7 +311,7 @@ function FaceCheck() {
               <span className="text-xs font-bold text-clay tabular-nums">Tension {reading.angerLevel}</span>
             </div>
 
-            <ol className="flex flex-col gap-2 overflow-hidden">
+            <ol className="flex flex-col gap-2">
               {reading.ranking.map((row, i) => (
                 <li key={row.emotion} className="flex flex-col gap-1">
                   <div className="flex items-baseline justify-between">
