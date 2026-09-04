@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
+import { Mic, MicOff, Trash2 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { useRequireAuth } from "@/hooks/use-require-auth";
 
@@ -25,14 +26,20 @@ function Vent() {
   const [bars, setBars] = useState<number[]>(Array(24).fill(0.2));
   const [error, setError] = useState<string | null>(null);
   const [released, setReleased] = useState(false);
+  const [micOn, setMicOn] = useState(true);
+  const [clipUrl, setClipUrl] = useState<string | null>(null);
 
   const streamRef = useRef<MediaStream | null>(null);
   const ctxRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
   const rafRef = useRef<number | null>(null);
   const tickRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const recorderRef = useRef<MediaRecorder | null>(null);
+  const chunksRef = useRef<Blob[]>([]);
 
   const stop = () => {
+    if (recorderRef.current && recorderRef.current.state !== "inactive") recorderRef.current.stop();
+    recorderRef.current = null;
     if (tickRef.current) clearInterval(tickRef.current);
     if (rafRef.current) cancelAnimationFrame(rafRef.current);
     streamRef.current?.getTracks().forEach((t) => t.stop());
@@ -51,9 +58,28 @@ function Vent() {
     setError(null);
     setReleased(false);
     setSeconds(0);
+    if (clipUrl) URL.revokeObjectURL(clipUrl);
+    setClipUrl(null);
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
+      stream.getAudioTracks().forEach((t) => (t.enabled = micOn));
+
+      if (typeof MediaRecorder !== "undefined") {
+        chunksRef.current = [];
+        const recorder = new MediaRecorder(stream);
+        recorder.ondataavailable = (e) => {
+          if (e.data.size > 0) chunksRef.current.push(e.data);
+        };
+        recorder.onstop = () => {
+          if (!chunksRef.current.length) return;
+          const blob = new Blob(chunksRef.current, { type: recorder.mimeType || "audio/webm" });
+          chunksRef.current = [];
+          setClipUrl(URL.createObjectURL(blob));
+        };
+        recorder.start();
+        recorderRef.current = recorder;
+      }
       const ctx = new AudioContext();
       ctxRef.current = ctx;
       const source = ctx.createMediaStreamSource(stream);
@@ -79,6 +105,18 @@ function Vent() {
     }
   };
 
+  const toggleMic = () => {
+    const next = !micOn;
+    setMicOn(next);
+    streamRef.current?.getAudioTracks().forEach((t) => (t.enabled = next));
+  };
+
+  const discardClip = () => {
+    if (clipUrl) URL.revokeObjectURL(clipUrl);
+    setClipUrl(null);
+    setReleased(false);
+  };
+
   const release = () => {
     stop();
     setBars(Array(24).fill(0.2));
@@ -93,7 +131,7 @@ function Vent() {
     <AppShell title="Voice Dump">
       <div className="flex-1 flex flex-col items-center justify-between px-6 pb-16 pt-4">
         <p className="text-sm text-ink-light text-center text-pretty max-w-xs">
-          Say everything. No filter. Nothing is recorded — your voice stays in this moment.
+          Say everything. No filter. Your recording stays on this device — keep it or delete it.
         </p>
 
         <div className="flex flex-col items-center gap-8">
@@ -124,6 +162,46 @@ function Vent() {
         </div>
 
         <div className="w-full flex flex-col gap-3">
+          <button
+            type="button"
+            onClick={toggleMic}
+            aria-pressed={micOn}
+            aria-label={micOn ? "Turn microphone off" : "Turn microphone on"}
+            className={`w-full flex items-center justify-between rounded-[24px] border px-4 py-3 text-xs font-bold transition-colors ${
+              micOn
+                ? "bg-flow-soft text-flow border-flow/30"
+                : "bg-sand-50 text-ink-light border-sand-200/60"
+            }`}
+          >
+            <span className="flex items-center gap-2">
+              {micOn ? <Mic className="size-4" /> : <MicOff className="size-4" />}
+              Microphone {micOn ? "on" : "off"}
+            </span>
+            <span
+              className={`relative h-5 w-9 rounded-full transition-colors ${micOn ? "bg-flow" : "bg-sand-300"}`}
+            >
+              <span
+                className={`absolute top-0.5 size-4 rounded-full bg-sand-50 transition-all ${
+                  micOn ? "left-[1.125rem]" : "left-0.5"
+                }`}
+              />
+            </span>
+          </button>
+
+          {clipUrl && !recording && (
+            <div className="flex items-center gap-2 rounded-[24px] bg-sand-50 border border-sand-200/60 px-3 py-2">
+              <audio src={clipUrl} controls className="h-8 flex-1 min-w-0" />
+              <button
+                type="button"
+                onClick={discardClip}
+                aria-label="Delete recording"
+                className="size-9 shrink-0 rounded-full bg-clay/10 text-clay flex items-center justify-center active:scale-95 transition-transform"
+              >
+                <Trash2 className="size-4" />
+              </button>
+            </div>
+          )}
+
           {!recording ? (
             <button
               onClick={start}
