@@ -124,8 +124,10 @@ function FaceCheck() {
     canvas.height = 512;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-    ctx.translate(canvas.width, 0);
-    ctx.scale(-1, 1);
+    if (facing === "user") {
+      ctx.translate(canvas.width, 0);
+      ctx.scale(-1, 1);
+    }
     ctx.drawImage(
       video,
       (video.videoWidth - size) / 2,
@@ -189,7 +191,7 @@ function FaceCheck() {
               ref={videoRef}
               playsInline
               muted
-              className="size-full object-cover -scale-x-100"
+              className={`size-full object-cover ${facing === "user" ? "-scale-x-100" : ""}`}
               aria-label="Camera preview"
             />
           ) : shot ? (
