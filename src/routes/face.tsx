@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Camera, RefreshCw, ScanFace, Upload } from "lucide-react";
+import { Camera, RefreshCw, ScanFace, SwitchCamera, Upload } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { useRequireAuth } from "@/hooks/use-require-auth";
 import { storage } from "@/lib/storage";
@@ -39,6 +39,7 @@ function FaceCheck() {
   const fileRef = useRef<HTMLInputElement | null>(null);
 
   const [cameraOn, setCameraOn] = useState(false);
+  const [facing, setFacing] = useState<"user" | "environment">("user");
   const [shot, setShot] = useState<string | null>(null);
   const [reading, setReading] = useState<FaceReading | null>(null);
   const [busy, setBusy] = useState(false);
@@ -53,6 +54,23 @@ function FaceCheck() {
 
   useEffect(() => stopCamera, []);
 
+  const openStream = async (mode: "user" | "environment") => {
+    streamRef.current?.getTracks().forEach((t) => t.stop());
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: { ideal: mode }, width: { ideal: 640 }, height: { ideal: 640 } },
+      audio: false,
+    });
+    streamRef.current = stream;
+    setFacing(mode);
+    setCameraOn(true);
+    requestAnimationFrame(() => {
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        void videoRef.current.play();
+      }
+    });
+  };
+
   const startCamera = async () => {
     if (loading || !user) return;
     setError(null);
@@ -60,20 +78,23 @@ function FaceCheck() {
     setShot(null);
     setSaved(false);
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "user", width: { ideal: 640 }, height: { ideal: 640 } },
-        audio: false,
-      });
-      streamRef.current = stream;
-      setCameraOn(true);
-      requestAnimationFrame(() => {
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-          void videoRef.current.play();
-        }
-      });
+      await openStream(facing);
     } catch {
       setError("Camera access was blocked. You can upload a photo instead.");
+    }
+  };
+
+  const flipCamera = async () => {
+    const next = facing === "user" ? "environment" : "user";
+    try {
+      await openStream(next);
+    } catch {
+      setError("Couldn't switch camera — this device may only have one.");
+      try {
+        await openStream(facing);
+      } catch {
+        setCameraOn(false);
+      }
     }
   };
 
@@ -103,8 +124,10 @@ function FaceCheck() {
     canvas.height = 512;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-    ctx.translate(canvas.width, 0);
-    ctx.scale(-1, 1);
+    if (facing === "user") {
+      ctx.translate(canvas.width, 0);
+      ctx.scale(-1, 1);
+    }
     ctx.drawImage(
       video,
       (video.videoWidth - size) / 2,
@@ -168,7 +191,7 @@ function FaceCheck() {
               ref={videoRef}
               playsInline
               muted
-              className="size-full object-cover -scale-x-100"
+              className={`size-full object-cover ${facing === "user" ? "-scale-x-100" : ""}`}
               aria-label="Camera preview"
             />
           ) : shot ? (
@@ -180,6 +203,17 @@ function FaceCheck() {
                 Face a soft light and keep your whole face in frame.
               </p>
             </div>
+          )}
+          {cameraOn && !busy && (
+            <button
+              type="button"
+              onClick={flipCamera}
+              aria-label={facing === "user" ? "Switch to back camera" : "Switch to front camera"}
+              className="absolute top-3 right-3 flex items-center gap-1.5 rounded-full bg-ink/55 px-3 py-2 text-[10px] font-bold text-sand-50 backdrop-blur-sm active:scale-95 transition-transform"
+            >
+              <SwitchCamera className="size-3.5" />
+              {facing === "user" ? "Front" : "Back"}
+            </button>
           )}
           {busy && (
             <div className="absolute inset-0 bg-ink/45 backdrop-blur-sm flex flex-col items-center justify-center gap-2">
