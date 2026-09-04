@@ -4,6 +4,7 @@ export type FaceReading = {
   ranking: EmotionScore[];
   angerLevel: number;
   note: string;
+  summary: string;
 };
 
 const GATEWAY_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
@@ -15,6 +16,7 @@ Rules:
 - Rank 4 to 6 emotions from strongest to weakest, scores 0-100, summing to roughly 100.
 - angerLevel is 0-10, how much anger/tension the expression shows.
 - note: one short, warm, non-judgemental sentence (max 18 words) addressed to the person.
+- summary: 2-3 short sentences describing what the expression shows (brow, eyes, jaw, mouth), why the tension number fits, and one simple next step.
 - If no clear human face is visible, set faceDetected false and return an empty ranking.`;
 
 const TOOL = {
@@ -40,8 +42,9 @@ const TOOL = {
         },
         angerLevel: { type: "number" },
         note: { type: "string" },
+        summary: { type: "string" },
       },
-      required: ["faceDetected", "ranking", "angerLevel", "note"],
+      required: ["faceDetected", "ranking", "angerLevel", "note", "summary"],
       additionalProperties: false,
     },
   },
@@ -103,5 +106,6 @@ export async function readFaceEmotions(imageDataUrl: string): Promise<FaceReadin
     ranking,
     angerLevel: Math.max(0, Math.min(10, Math.round(Number(parsed.angerLevel ?? 0)))),
     note: typeof parsed.note === "string" ? parsed.note : "",
+    summary: typeof parsed.summary === "string" ? parsed.summary : "",
   };
 }
