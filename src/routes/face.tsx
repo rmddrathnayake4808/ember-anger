@@ -54,6 +54,23 @@ function FaceCheck() {
 
   useEffect(() => stopCamera, []);
 
+  const openStream = async (mode: "user" | "environment") => {
+    streamRef.current?.getTracks().forEach((t) => t.stop());
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: { ideal: mode }, width: { ideal: 640 }, height: { ideal: 640 } },
+      audio: false,
+    });
+    streamRef.current = stream;
+    setFacing(mode);
+    setCameraOn(true);
+    requestAnimationFrame(() => {
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        void videoRef.current.play();
+      }
+    });
+  };
+
   const startCamera = async () => {
     if (loading || !user) return;
     setError(null);
@@ -61,20 +78,23 @@ function FaceCheck() {
     setShot(null);
     setSaved(false);
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "user", width: { ideal: 640 }, height: { ideal: 640 } },
-        audio: false,
-      });
-      streamRef.current = stream;
-      setCameraOn(true);
-      requestAnimationFrame(() => {
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-          void videoRef.current.play();
-        }
-      });
+      await openStream(facing);
     } catch {
       setError("Camera access was blocked. You can upload a photo instead.");
+    }
+  };
+
+  const flipCamera = async () => {
+    const next = facing === "user" ? "environment" : "user";
+    try {
+      await openStream(next);
+    } catch {
+      setError("Couldn't switch camera — this device may only have one.");
+      try {
+        await openStream(facing);
+      } catch {
+        setCameraOn(false);
+      }
     }
   };
 
