@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Camera, RefreshCw, ScanFace, Upload } from "lucide-react";
+import { Camera, RefreshCw, ScanFace, SwitchCamera, Upload } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { useRequireAuth } from "@/hooks/use-require-auth";
 import { storage } from "@/lib/storage";
@@ -39,6 +39,7 @@ function FaceCheck() {
   const fileRef = useRef<HTMLInputElement | null>(null);
 
   const [cameraOn, setCameraOn] = useState(false);
+  const [facing, setFacing] = useState<"user" | "environment">("user");
   const [shot, setShot] = useState<string | null>(null);
   const [reading, setReading] = useState<FaceReading | null>(null);
   const [busy, setBusy] = useState(false);
