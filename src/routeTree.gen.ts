@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as WalkRouteImport } from './routes/walk'
 import { Route as VerifyRouteImport } from './routes/verify'
 import { Route as VentRouteImport } from './routes/vent'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SigninRouteImport } from './routes/signin'
@@ -34,6 +35,11 @@ const VerifyRoute = VerifyRouteImport.update({
 const VentRoute = VentRouteImport.update({
   id: '/vent',
   path: '/vent',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -86,6 +92,7 @@ export interface FileRoutesByFullPath {
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms': typeof TermsRoute
   '/vent': typeof VentRoute
   '/verify': typeof VerifyRoute
   '/walk': typeof WalkRoute
@@ -99,6 +106,7 @@ export interface FileRoutesByTo {
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms': typeof TermsRoute
   '/vent': typeof VentRoute
   '/verify': typeof VerifyRoute
   '/walk': typeof WalkRoute
@@ -113,6 +121,7 @@ export interface FileRoutesById {
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms': typeof TermsRoute
   '/vent': typeof VentRoute
   '/verify': typeof VerifyRoute
   '/walk': typeof WalkRoute
@@ -128,6 +137,7 @@ export interface FileRouteTypes {
     | '/signin'
     | '/signup'
     | '/sitemap.xml'
+    | '/terms'
     | '/vent'
     | '/verify'
     | '/walk'
@@ -141,6 +151,7 @@ export interface FileRouteTypes {
     | '/signin'
     | '/signup'
     | '/sitemap.xml'
+    | '/terms'
     | '/vent'
     | '/verify'
     | '/walk'
@@ -154,6 +165,7 @@ export interface FileRouteTypes {
     | '/signin'
     | '/signup'
     | '/sitemap.xml'
+    | '/terms'
     | '/vent'
     | '/verify'
     | '/walk'
@@ -168,6 +180,7 @@ export interface RootRouteChildren {
   SigninRoute: typeof SigninRoute
   SignupRoute: typeof SignupRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  TermsRoute: typeof TermsRoute
   VentRoute: typeof VentRoute
   VerifyRoute: typeof VerifyRoute
   WalkRoute: typeof WalkRoute
@@ -194,6 +207,13 @@ declare module '@tanstack/react-router' {
       path: '/vent'
       fullPath: '/vent'
       preLoaderRoute: typeof VentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap.xml': {
@@ -264,6 +284,7 @@ const rootRouteChildren: RootRouteChildren = {
   SigninRoute: SigninRoute,
   SignupRoute: SignupRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  TermsRoute: TermsRoute,
   VentRoute: VentRoute,
   VerifyRoute: VerifyRoute,
   WalkRoute: WalkRoute,
