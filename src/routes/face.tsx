@@ -282,7 +282,30 @@ function FaceCheck() {
         )}
 
         {reading?.faceDetected && (
-          <section className="flex-1 min-h-0 bg-sand-50 rounded-[24px] p-4 border border-sand-200/60 flex flex-col gap-3">
+          <section className="flex-1 min-h-0 bg-sand-50 rounded-[24px] p-4 border border-sand-200/60 flex flex-col gap-3 overflow-y-auto">
+            <div className="shrink-0 rounded-[20px] bg-clay/10 border border-clay/20 p-3 flex flex-col gap-2">
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex flex-col">
+                  <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-ink-light">
+                    Your reading
+                  </span>
+                  <span className="font-display font-extrabold text-ink text-base capitalize">
+                    {reading.ranking[0]?.emotion ?? "Neutral"}
+                  </span>
+                </div>
+                <div className="flex flex-col items-end">
+                  <span className="font-display font-extrabold text-clay text-2xl leading-none tabular-nums">
+                    {reading.angerLevel}
+                    <span className="text-xs font-bold text-ink-light">/10</span>
+                  </span>
+                  <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-ink-light">Tension</span>
+                </div>
+              </div>
+              {reading.summary && (
+                <p className="text-[11px] font-medium text-ink-light text-pretty leading-snug">{reading.summary}</p>
+              )}
+            </div>
+
             <div className="flex items-end justify-between shrink-0">
               <h3 className="font-display font-bold text-ink text-sm">Emotion ranking</h3>
               <span className="text-xs font-bold text-clay tabular-nums">Tension {reading.angerLevel}</span>
