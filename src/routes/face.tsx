@@ -204,6 +204,17 @@ function FaceCheck() {
               </p>
             </div>
           )}
+          {cameraOn && !busy && (
+            <button
+              type="button"
+              onClick={flipCamera}
+              aria-label={facing === "user" ? "Switch to back camera" : "Switch to front camera"}
+              className="absolute top-3 right-3 flex items-center gap-1.5 rounded-full bg-ink/55 px-3 py-2 text-[10px] font-bold text-sand-50 backdrop-blur-sm active:scale-95 transition-transform"
+            >
+              <SwitchCamera className="size-3.5" />
+              {facing === "user" ? "Front" : "Back"}
+            </button>
+          )}
           {busy && (
             <div className="absolute inset-0 bg-ink/45 backdrop-blur-sm flex flex-col items-center justify-center gap-2">
               <div className="h-1.5 w-28 overflow-hidden rounded-full bg-sand-50/25">
