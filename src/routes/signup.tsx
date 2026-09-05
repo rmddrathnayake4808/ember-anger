@@ -1,8 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState, type FormEvent } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable/index";
 import { useAuth } from "@/lib/auth-context";
+import { signInWithGoogle } from "@/lib/google-sign-in";
 import { AuthScaffold, Field, Divider, GoogleIcon } from "@/routes/signin";
 
 export const Route = createFileRoute("/signup")({
@@ -51,15 +51,15 @@ function SignUp() {
 
   const onGoogle = async () => {
     setError(null);
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
-    });
-    if (result.error) {
-      setError("error" in result && result.error instanceof Error ? result.error.message : "Google sign-in failed");
-      return;
+    setLoading(true);
+    try {
+      const result = await signInWithGoogle();
+      if (!result.redirected) navigate({ to: "/" });
+    } catch (googleError) {
+      setError(googleError instanceof Error ? googleError.message : "Google sign-in failed");
+    } finally {
+      setLoading(false);
     }
-    if (result.redirected) return;
-    navigate({ to: "/" });
   };
 
   return (
@@ -94,6 +94,7 @@ function SignUp() {
 
       <button
         onClick={onGoogle}
+        disabled={loading}
         className="w-full bg-sand-50 text-ink border border-sand-200 rounded-[24px] py-4 font-display font-bold flex items-center justify-center gap-3 active:scale-[0.98] transition-transform"
       >
         <GoogleIcon />
