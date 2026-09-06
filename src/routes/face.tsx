@@ -26,6 +26,12 @@ export const Route = createFileRoute("/face")({
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://ember-anger.lovable.app/face" },
       { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Face Check — Ember: release anger calmly" },
+      {
+        name: "twitter:description",
+        content:
+          "Analyze your expression in seconds. Ember's Face Check reads your photo, ranks your emotions, and gives you a tension score for your check-in.",
+      },
     ],
     links: [{ rel: "canonical", href: "https://ember-anger.lovable.app/face" }],
   }),

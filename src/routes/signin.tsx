@@ -22,6 +22,12 @@ export const Route = createFileRoute("/signin")({
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://ember-anger.lovable.app/signin" },
       { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Sign In — Ember" },
+      {
+        name: "twitter:description",
+        content:
+          "Sign in to Ember to track tension, practice breathing, vent privately, journal, and release anger calmly.",
+      },
     ],
     links: [{ rel: "canonical", href: "https://ember-anger.lovable.app/signin" }],
   }),
