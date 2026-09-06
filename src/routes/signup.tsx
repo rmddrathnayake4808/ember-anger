@@ -6,6 +6,26 @@ import { signInWithGoogle } from "@/lib/google-sign-in";
 import { AuthScaffold, Field, Divider, GoogleIcon } from "@/routes/signin";
 
 export const Route = createFileRoute("/signup")({
+  head: () => ({
+    meta: [
+      { title: "Create Account — Ember" },
+      {
+        name: "description",
+        content:
+          "Create your Ember account and start tracking tension, practicing breathing, venting, journaling, and releasing anger calmly.",
+      },
+      { property: "og:title", content: "Create Account — Ember" },
+      {
+        property: "og:description",
+        content:
+          "Create your Ember account and start tracking tension, practicing breathing, venting, journaling, and releasing anger calmly.",
+      },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://ember-anger.lovable.app/signup" },
+      { name: "twitter:card", content: "summary" },
+    ],
+    links: [{ rel: "canonical", href: "https://ember-anger.lovable.app/signup" }],
+  }),
   component: SignUp,
 });
 
