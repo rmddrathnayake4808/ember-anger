@@ -13,6 +13,7 @@ import { Route as WalkRouteImport } from './routes/walk'
 import { Route as VerifyRouteImport } from './routes/verify'
 import { Route as VentRouteImport } from './routes/vent'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as TechniquesRouteImport } from './routes/techniques'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SigninRouteImport } from './routes/signin'
@@ -40,6 +41,11 @@ const VentRoute = VentRouteImport.update({
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TechniquesRoute = TechniquesRouteImport.update({
+  id: '/techniques',
+  path: '/techniques',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -92,6 +98,7 @@ export interface FileRoutesByFullPath {
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/techniques': typeof TechniquesRoute
   '/terms': typeof TermsRoute
   '/vent': typeof VentRoute
   '/verify': typeof VerifyRoute
@@ -106,6 +113,7 @@ export interface FileRoutesByTo {
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/techniques': typeof TechniquesRoute
   '/terms': typeof TermsRoute
   '/vent': typeof VentRoute
   '/verify': typeof VerifyRoute
@@ -121,6 +129,7 @@ export interface FileRoutesById {
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/techniques': typeof TechniquesRoute
   '/terms': typeof TermsRoute
   '/vent': typeof VentRoute
   '/verify': typeof VerifyRoute
@@ -137,6 +146,7 @@ export interface FileRouteTypes {
     | '/signin'
     | '/signup'
     | '/sitemap.xml'
+    | '/techniques'
     | '/terms'
     | '/vent'
     | '/verify'
@@ -151,6 +161,7 @@ export interface FileRouteTypes {
     | '/signin'
     | '/signup'
     | '/sitemap.xml'
+    | '/techniques'
     | '/terms'
     | '/vent'
     | '/verify'
@@ -165,6 +176,7 @@ export interface FileRouteTypes {
     | '/signin'
     | '/signup'
     | '/sitemap.xml'
+    | '/techniques'
     | '/terms'
     | '/vent'
     | '/verify'
@@ -180,6 +192,7 @@ export interface RootRouteChildren {
   SigninRoute: typeof SigninRoute
   SignupRoute: typeof SignupRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  TechniquesRoute: typeof TechniquesRoute
   TermsRoute: typeof TermsRoute
   VentRoute: typeof VentRoute
   VerifyRoute: typeof VerifyRoute
@@ -214,6 +227,13 @@ declare module '@tanstack/react-router' {
       path: '/terms'
       fullPath: '/terms'
       preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/techniques': {
+      id: '/techniques'
+      path: '/techniques'
+      fullPath: '/techniques'
+      preLoaderRoute: typeof TechniquesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap.xml': {
@@ -284,6 +304,7 @@ const rootRouteChildren: RootRouteChildren = {
   SigninRoute: SigninRoute,
   SignupRoute: SignupRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  TechniquesRoute: TechniquesRoute,
   TermsRoute: TermsRoute,
   VentRoute: VentRoute,
   VerifyRoute: VerifyRoute,
