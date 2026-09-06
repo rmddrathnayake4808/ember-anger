@@ -23,6 +23,12 @@ export const Route = createFileRoute("/signup")({
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://ember-anger.lovable.app/signup" },
       { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Create Account — Ember" },
+      {
+        name: "twitter:description",
+        content:
+          "Create your Ember account and start tracking tension, practicing breathing, venting, journaling, and releasing anger calmly.",
+      },
     ],
     links: [{ rel: "canonical", href: "https://ember-anger.lovable.app/signup" }],
   }),

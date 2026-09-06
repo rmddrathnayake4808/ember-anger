@@ -24,6 +24,12 @@ export const Route = createFileRoute("/verify")({
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://ember-anger.lovable.app/verify" },
       { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Verify Email — Ember" },
+      {
+        name: "twitter:description",
+        content:
+          "Enter the 6-digit code sent to your email to verify your Ember account and start releasing anger calmly.",
+      },
     ],
     links: [{ rel: "canonical", href: "https://ember-anger.lovable.app/verify" }],
   }),
