@@ -5,6 +5,26 @@ import { useAuth } from "@/lib/auth-context";
 import { signInWithGoogle } from "@/lib/google-sign-in";
 
 export const Route = createFileRoute("/signin")({
+  head: () => ({
+    meta: [
+      { title: "Sign In — Ember" },
+      {
+        name: "description",
+        content:
+          "Sign in to Ember to track tension, practice breathing, vent privately, journal, and release anger calmly.",
+      },
+      { property: "og:title", content: "Sign In — Ember" },
+      {
+        property: "og:description",
+        content:
+          "Sign in to Ember to track tension, practice breathing, vent privately, journal, and release anger calmly.",
+      },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://ember-anger.lovable.app/signin" },
+      { name: "twitter:card", content: "summary" },
+    ],
+    links: [{ rel: "canonical", href: "https://ember-anger.lovable.app/signin" }],
+  }),
   component: SignIn,
 });
 

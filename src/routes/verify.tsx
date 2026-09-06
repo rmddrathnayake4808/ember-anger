@@ -7,6 +7,26 @@ export const Route = createFileRoute("/verify")({
   validateSearch: (s: Record<string, unknown>) => ({
     email: typeof s.email === "string" ? s.email : "",
   }),
+  head: () => ({
+    meta: [
+      { title: "Verify Email — Ember" },
+      {
+        name: "description",
+        content:
+          "Enter the 6-digit code sent to your email to verify your Ember account and start releasing anger calmly.",
+      },
+      { property: "og:title", content: "Verify Email — Ember" },
+      {
+        property: "og:description",
+        content:
+          "Enter the 6-digit code sent to your email to verify your Ember account and start releasing anger calmly.",
+      },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://ember-anger.lovable.app/verify" },
+      { name: "twitter:card", content: "summary" },
+    ],
+    links: [{ rel: "canonical", href: "https://ember-anger.lovable.app/verify" }],
+  }),
   component: Verify,
 });
 

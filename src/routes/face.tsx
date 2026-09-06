@@ -15,17 +15,19 @@ export const Route = createFileRoute("/face")({
       {
         name: "description",
         content:
-          "Track tension, breathe through triggers, vent privately, and journal to understand anger. Ember turns intense moments into calm action.",
+          "Analyze your expression in seconds. Ember's Face Check reads your photo, ranks your emotions, and gives you a tension score for your check-in.",
       },
       { property: "og:title", content: "Face Check — Ember: release anger calmly" },
       {
         property: "og:description",
         content:
-          "Track tension, breathe through triggers, vent privately, and journal to understand anger. Ember turns intense moments into calm action.",
+          "Analyze your expression in seconds. Ember's Face Check reads your photo, ranks your emotions, and gives you a tension score for your check-in.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://ember-anger.lovable.app/face" },
       { name: "twitter:card", content: "summary" },
     ],
+    links: [{ rel: "canonical", href: "https://ember-anger.lovable.app/face" }],
   }),
   component: FaceCheck,
 });
