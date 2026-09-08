@@ -82,7 +82,7 @@ export async function readFaceEmotions(imageDataUrl: string): Promise<FaceReadin
     console.error(`AI emotion request failed [${response.status}]: ${errorBody}`);
     if (response.status === 429) throw new Error("Too many reads right now — try again in a moment.");
     if (response.status === 402) throw new Error("AI credits are exhausted for this workspace.");
-    throw new Error(`Emotion read failed [${response.status}]: ${errorBody}`);
+    throw new Error("Something went wrong reading that photo. Please try again.");
   }
 
   const payload = (await response.json()) as {

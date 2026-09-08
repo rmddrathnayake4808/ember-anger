@@ -81,6 +81,11 @@ function Journal() {
           <span>{keepCount} kept entr{keepCount === 1 ? "y" : "ies"}</span>
         </div>
 
+        <p className="text-[11px] leading-relaxed text-ink-light/80 text-center px-2">
+          Kept entries stay only on this device and never leave it. They're erased when you sign out.
+        </p>
+
+
         <div className="flex gap-3">
           <button
             onClick={keep}
