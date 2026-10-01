@@ -60,7 +60,17 @@ export function EmotionChat() {
     };
   }, [open, user, initial]);
 
-  if (loading || !user) return null;
+  if (loading) return null;
+  if (!user)
+    return (
+      <a
+        href="/signin"
+        className="fixed bottom-28 right-5 z-40 size-14 rounded-full bg-clay text-primary-foreground shadow-[var(--shadow-card)] flex items-center justify-center active:scale-95 transition-transform"
+        aria-label="Sign in to chat about your emotions"
+      >
+        <MessageCircleHeart className="size-6" />
+      </a>
+    );
 
   return (
     <>
