@@ -6,7 +6,7 @@ const EmotionChat = lazy(() => import("@/components/EmotionChat").then((m) => ({
 function ClientChat() {
   const [ready, setReady] = useStateRoot(false);
   useEffectRoot(() => setReady(true), []);
-  return ready ? <Suspense fallback={null}><ClientChat /></Suspense> : null;
+  return ready ? <Suspense fallback={null}><EmotionChat /></Suspense> : null;
 }
 
 import appCss from "../styles.css?url";
