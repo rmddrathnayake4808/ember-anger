@@ -37,6 +37,7 @@ export const Route = createRootRoute({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
+      { name: "google-site-verification", content: "Ry0KEq7Geifgqb-AtCoB-WfN2k6Qgrp9uIOhQl2B9_4" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Ember — Release anger calmly" },
       { name: "description", content: "Track tension, breathe through triggers, vent privately, and journal to understand anger. Ember turns intense moments into calm action." },
