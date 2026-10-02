@@ -13,13 +13,13 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Track tension, breathe through triggers, vent privately, and journal to understand anger. Ember turns intense moments into calm action.",
+          "Check in with your tension level, then release it with guided breathing, private venting, journaling, and mindful walks — all in one calm space.",
       },
       { property: "og:title", content: "Ember — Track tension & release anger calmly" },
       {
         property: "og:description",
         content:
-          "Track tension, breathe through triggers, vent privately, and journal to understand anger. Ember turns intense moments into calm action.",
+          "Check in with your tension level, then release it with guided breathing, private venting, journaling, and mindful walks — all in one calm space.",
       },
     ],
   }),

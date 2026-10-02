@@ -6,6 +6,31 @@ import { supabase } from "@/integrations/supabase/client";
 import { getStoredTheme, setStoredTheme, type ThemeMode } from "@/lib/theme";
 
 export const Route = createFileRoute("/settings")({
+  head: () => ({
+    meta: [
+      { title: "Settings — Ember" },
+      {
+        name: "description",
+        content:
+          "Manage your Ember account: choose a light, dark, or system theme, update your display name, and control your anger-management companion.",
+      },
+      { property: "og:title", content: "Settings — Ember" },
+      {
+        property: "og:description",
+        content:
+          "Manage your Ember account: choose a light, dark, or system theme, update your display name, and control your anger-management companion.",
+      },
+      { property: "og:url", content: "https://ember-anger.lovable.app/settings" },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Settings — Ember" },
+      {
+        name: "twitter:description",
+        content:
+          "Manage your Ember account: choose a light, dark, or system theme, update your display name, and control your anger-management companion.",
+      },
+    ],
+    links: [{ rel: "canonical", href: "https://ember-anger.lovable.app/settings" }],
+  }),
   component: Settings,
 });
 
