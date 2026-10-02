@@ -70,8 +70,8 @@ function SignUp() {
     if (data.session) {
       navigate({ to: "/" });
     } else {
-      setInfo("We sent a 6-digit code to your email.");
-      navigate({ to: "/verify", search: { email } });
+      setInfo("Account created — you can sign in now.");
+      navigate({ to: "/signin" });
     }
   };
 

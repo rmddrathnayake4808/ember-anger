@@ -10,7 +10,6 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WalkRouteImport } from './routes/walk'
-import { Route as VerifyRouteImport } from './routes/verify'
 import { Route as VentRouteImport } from './routes/vent'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TechniquesRouteImport } from './routes/techniques'
@@ -27,11 +26,6 @@ import { Route as ApiChatRouteImport } from './routes/api/chat'
 const WalkRoute = WalkRouteImport.update({
   id: '/walk',
   path: '/walk',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const VerifyRoute = VerifyRouteImport.update({
-  id: '/verify',
-  path: '/verify',
   getParentRoute: () => rootRouteImport,
 } as any)
 const VentRoute = VentRouteImport.update({
@@ -107,7 +101,6 @@ export interface FileRoutesByFullPath {
   '/techniques': typeof TechniquesRoute
   '/terms': typeof TermsRoute
   '/vent': typeof VentRoute
-  '/verify': typeof VerifyRoute
   '/walk': typeof WalkRoute
   '/api/chat': typeof ApiChatRoute
 }
@@ -123,7 +116,6 @@ export interface FileRoutesByTo {
   '/techniques': typeof TechniquesRoute
   '/terms': typeof TermsRoute
   '/vent': typeof VentRoute
-  '/verify': typeof VerifyRoute
   '/walk': typeof WalkRoute
   '/api/chat': typeof ApiChatRoute
 }
@@ -140,7 +132,6 @@ export interface FileRoutesById {
   '/techniques': typeof TechniquesRoute
   '/terms': typeof TermsRoute
   '/vent': typeof VentRoute
-  '/verify': typeof VerifyRoute
   '/walk': typeof WalkRoute
   '/api/chat': typeof ApiChatRoute
 }
@@ -158,7 +149,6 @@ export interface FileRouteTypes {
     | '/techniques'
     | '/terms'
     | '/vent'
-    | '/verify'
     | '/walk'
     | '/api/chat'
   fileRoutesByTo: FileRoutesByTo
@@ -174,7 +164,6 @@ export interface FileRouteTypes {
     | '/techniques'
     | '/terms'
     | '/vent'
-    | '/verify'
     | '/walk'
     | '/api/chat'
   id:
@@ -190,7 +179,6 @@ export interface FileRouteTypes {
     | '/techniques'
     | '/terms'
     | '/vent'
-    | '/verify'
     | '/walk'
     | '/api/chat'
   fileRoutesById: FileRoutesById
@@ -207,7 +195,6 @@ export interface RootRouteChildren {
   TechniquesRoute: typeof TechniquesRoute
   TermsRoute: typeof TermsRoute
   VentRoute: typeof VentRoute
-  VerifyRoute: typeof VerifyRoute
   WalkRoute: typeof WalkRoute
   ApiChatRoute: typeof ApiChatRoute
 }
@@ -219,13 +206,6 @@ declare module '@tanstack/react-router' {
       path: '/walk'
       fullPath: '/walk'
       preLoaderRoute: typeof WalkRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/verify': {
-      id: '/verify'
-      path: '/verify'
-      fullPath: '/verify'
-      preLoaderRoute: typeof VerifyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/vent': {
@@ -327,7 +307,6 @@ const rootRouteChildren: RootRouteChildren = {
   TechniquesRoute: TechniquesRoute,
   TermsRoute: TermsRoute,
   VentRoute: VentRoute,
-  VerifyRoute: VerifyRoute,
   WalkRoute: WalkRoute,
   ApiChatRoute: ApiChatRoute,
 }
