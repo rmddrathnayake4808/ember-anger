@@ -21,7 +21,17 @@ export const Route = createFileRoute("/")({
         content:
           "Check in with your tension level, then release it with guided breathing, private venting, journaling, and mindful walks — all in one calm space.",
       },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://ember-anger.lovable.app/" },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Ember — Track tension & release anger calmly" },
+      {
+        name: "twitter:description",
+        content:
+          "Check in with your tension level, then release it with guided breathing, private venting, journaling, and mindful walks — all in one calm space.",
+      },
     ],
+    links: [{ rel: "canonical", href: "https://ember-anger.lovable.app/" }],
   }),
   component: Home,
 });
