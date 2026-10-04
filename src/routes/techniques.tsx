@@ -20,6 +20,12 @@ export const Route = createFileRoute("/techniques")({
       { property: "og:type", content: "article" },
       { property: "og:url", content: "https://ember-anger.lovable.app/techniques" },
       { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Anger Management Techniques — Ember" },
+      {
+        name: "twitter:description",
+        content:
+          "Learn practical anger management techniques: box breathing, mindful walking, voice venting, and expressive journaling. Ember helps you turn intense moments into calm action.",
+      },
     ],
     links: [{ rel: "canonical", href: "https://ember-anger.lovable.app/techniques" }],
   }),
