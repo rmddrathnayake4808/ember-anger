@@ -46,11 +46,10 @@ export const Route = createRootRoute({
       { property: "og:description", content: "Track tension, breathe through triggers, vent privately, and journal to understand anger. Ember turns intense moments into calm action." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
       { name: "twitter:title", content: "Ember — Release anger calmly" },
       { name: "twitter:description", content: "Track tension, breathe through triggers, vent privately, and journal to understand anger. Ember turns intense moments into calm action." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/0674dbd0-e28f-44ee-a131-1f13aff28226/id-preview-1e57e356--fc0cd371-660c-47d2-9af5-0a4a6ceb4952.lovable.app-1778068148211.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/0674dbd0-e28f-44ee-a131-1f13aff28226/id-preview-1e57e356--fc0cd371-660c-47d2-9af5-0a4a6ceb4952.lovable.app-1778068148211.png" },
+      { property: "og:image", content: "https://ember-anger.lovable.app/apple-touch-icon.png" },
+      { name: "twitter:image", content: "https://ember-anger.lovable.app/apple-touch-icon.png" },
     ],
     links: [
       { rel: "icon", type: "image/png", href: "/favicon.png" },

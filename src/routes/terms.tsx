@@ -8,8 +8,12 @@ export const Route = createFileRoute("/terms")({
       { property: "og:title", content: "Terms of Service — Ember" },
       { property: "og:description", content: "The terms that govern your use of Ember, the calm anger-release companion." },
       { property: "og:type", content: "article" },
+      { property: "og:url", content: "https://ember-anger.lovable.app/terms" },
       { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Terms of Service — Ember" },
+      { name: "twitter:description", content: "The terms that govern your use of Ember, the calm anger-release companion." },
     ],
+    links: [{ rel: "canonical", href: "https://ember-anger.lovable.app/terms" }],
   }),
   component: Terms,
 });
