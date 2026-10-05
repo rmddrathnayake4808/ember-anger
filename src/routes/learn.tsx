@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { BookOpen, ExternalLink, Lightbulb, X, Loader2 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
@@ -65,12 +64,17 @@ function LearnPage() {
 
 function Reader({ article, onClose }: { article: Article; onClose: () => void }) {
   const read = useServerFn(readArticle);
-  const { data, isLoading } = useQuery({
-    queryKey: ["article", article.id],
-    queryFn: () => read({ data: { id: article.id } }),
-    staleTime: 1000 * 60 * 60,
-  });
-  const paras = data?.paragraphs ?? [];
+  const [paras, setParas] = useState<{ tag: string; text: string }[]>([]);
+  const [isLoading, setLoading] = useState(true);
+  useEffect(() => {
+    let live = true;
+    setLoading(true);
+    read({ data: { id: article.id } })
+      .then((r) => live && setParas(r.paragraphs))
+      .catch(() => live && setParas([]))
+      .finally(() => live && setLoading(false));
+    return () => { live = false; };
+  }, [article.id, read]);
 
   return (
     <div className="fixed inset-0 z-50 bg-background flex flex-col">
