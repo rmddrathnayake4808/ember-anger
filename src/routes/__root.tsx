@@ -111,6 +111,9 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
+  useEffectRoot(() => {
+    void initAnalytics();
+  }, []);
   return (
     <AuthProvider>
       <WelcomeSplash />
