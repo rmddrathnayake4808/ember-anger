@@ -18,6 +18,7 @@ import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SigninRouteImport } from './routes/signin'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as LearnRouteImport } from './routes/learn'
+import { Route as JournalPromptsRouteImport } from './routes/journal-prompts'
 import { Route as JournalRouteImport } from './routes/journal'
 import { Route as FaceRouteImport } from './routes/face'
 import { Route as CbtAngerManagementRouteImport } from './routes/cbt-anger-management'
@@ -71,6 +72,11 @@ const LearnRoute = LearnRouteImport.update({
   path: '/learn',
   getParentRoute: () => rootRouteImport,
 } as any)
+const JournalPromptsRoute = JournalPromptsRouteImport.update({
+  id: '/journal-prompts',
+  path: '/journal-prompts',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const JournalRoute = JournalRouteImport.update({
   id: '/journal',
   path: '/journal',
@@ -114,6 +120,7 @@ export interface FileRoutesByFullPath {
   '/cbt-anger-management': typeof CbtAngerManagementRoute
   '/face': typeof FaceRoute
   '/journal': typeof JournalRoute
+  '/journal-prompts': typeof JournalPromptsRoute
   '/learn': typeof LearnRoute
   '/settings': typeof SettingsRoute
   '/signin': typeof SigninRoute
@@ -132,6 +139,7 @@ export interface FileRoutesByTo {
   '/cbt-anger-management': typeof CbtAngerManagementRoute
   '/face': typeof FaceRoute
   '/journal': typeof JournalRoute
+  '/journal-prompts': typeof JournalPromptsRoute
   '/learn': typeof LearnRoute
   '/settings': typeof SettingsRoute
   '/signin': typeof SigninRoute
@@ -151,6 +159,7 @@ export interface FileRoutesById {
   '/cbt-anger-management': typeof CbtAngerManagementRoute
   '/face': typeof FaceRoute
   '/journal': typeof JournalRoute
+  '/journal-prompts': typeof JournalPromptsRoute
   '/learn': typeof LearnRoute
   '/settings': typeof SettingsRoute
   '/signin': typeof SigninRoute
@@ -171,6 +180,7 @@ export interface FileRouteTypes {
     | '/cbt-anger-management'
     | '/face'
     | '/journal'
+    | '/journal-prompts'
     | '/learn'
     | '/settings'
     | '/signin'
@@ -189,6 +199,7 @@ export interface FileRouteTypes {
     | '/cbt-anger-management'
     | '/face'
     | '/journal'
+    | '/journal-prompts'
     | '/learn'
     | '/settings'
     | '/signin'
@@ -207,6 +218,7 @@ export interface FileRouteTypes {
     | '/cbt-anger-management'
     | '/face'
     | '/journal'
+    | '/journal-prompts'
     | '/learn'
     | '/settings'
     | '/signin'
@@ -226,6 +238,7 @@ export interface RootRouteChildren {
   CbtAngerManagementRoute: typeof CbtAngerManagementRoute
   FaceRoute: typeof FaceRoute
   JournalRoute: typeof JournalRoute
+  JournalPromptsRoute: typeof JournalPromptsRoute
   LearnRoute: typeof LearnRoute
   SettingsRoute: typeof SettingsRoute
   SigninRoute: typeof SigninRoute
@@ -304,6 +317,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LearnRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/journal-prompts': {
+      id: '/journal-prompts'
+      path: '/journal-prompts'
+      fullPath: '/journal-prompts'
+      preLoaderRoute: typeof JournalPromptsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/journal': {
       id: '/journal'
       path: '/journal'
@@ -362,6 +382,7 @@ const rootRouteChildren: RootRouteChildren = {
   CbtAngerManagementRoute: CbtAngerManagementRoute,
   FaceRoute: FaceRoute,
   JournalRoute: JournalRoute,
+  JournalPromptsRoute: JournalPromptsRoute,
   LearnRoute: LearnRoute,
   SettingsRoute: SettingsRoute,
   SigninRoute: SigninRoute,
