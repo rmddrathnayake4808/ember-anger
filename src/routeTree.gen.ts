@@ -24,6 +24,7 @@ import { Route as CbtAngerManagementRouteImport } from './routes/cbt-anger-manag
 import { Route as BreatheRouteImport } from './routes/breathe'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
+import { Route as ApiPublicAnalyticsConfigRouteImport } from './routes/api/public/analytics-config'
 
 const WalkRoute = WalkRouteImport.update({
   id: '/walk',
@@ -100,6 +101,12 @@ const ApiChatRoute = ApiChatRouteImport.update({
   path: '/api/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicAnalyticsConfigRoute =
+  ApiPublicAnalyticsConfigRouteImport.update({
+    id: '/api/public/analytics-config',
+    path: '/api/public/analytics-config',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -117,6 +124,7 @@ export interface FileRoutesByFullPath {
   '/vent': typeof VentRoute
   '/walk': typeof WalkRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/public/analytics-config': typeof ApiPublicAnalyticsConfigRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -134,6 +142,7 @@ export interface FileRoutesByTo {
   '/vent': typeof VentRoute
   '/walk': typeof WalkRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/public/analytics-config': typeof ApiPublicAnalyticsConfigRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -152,6 +161,7 @@ export interface FileRoutesById {
   '/vent': typeof VentRoute
   '/walk': typeof WalkRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/public/analytics-config': typeof ApiPublicAnalyticsConfigRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -171,6 +181,7 @@ export interface FileRouteTypes {
     | '/vent'
     | '/walk'
     | '/api/chat'
+    | '/api/public/analytics-config'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -188,6 +199,7 @@ export interface FileRouteTypes {
     | '/vent'
     | '/walk'
     | '/api/chat'
+    | '/api/public/analytics-config'
   id:
     | '__root__'
     | '/'
@@ -205,6 +217,7 @@ export interface FileRouteTypes {
     | '/vent'
     | '/walk'
     | '/api/chat'
+    | '/api/public/analytics-config'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -223,6 +236,7 @@ export interface RootRouteChildren {
   VentRoute: typeof VentRoute
   WalkRoute: typeof WalkRoute
   ApiChatRoute: typeof ApiChatRoute
+  ApiPublicAnalyticsConfigRoute: typeof ApiPublicAnalyticsConfigRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -332,6 +346,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiChatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/analytics-config': {
+      id: '/api/public/analytics-config'
+      path: '/api/public/analytics-config'
+      fullPath: '/api/public/analytics-config'
+      preLoaderRoute: typeof ApiPublicAnalyticsConfigRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -351,6 +372,7 @@ const rootRouteChildren: RootRouteChildren = {
   VentRoute: VentRoute,
   WalkRoute: WalkRoute,
   ApiChatRoute: ApiChatRoute,
+  ApiPublicAnalyticsConfigRoute: ApiPublicAnalyticsConfigRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
