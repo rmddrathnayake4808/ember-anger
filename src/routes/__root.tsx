@@ -2,6 +2,7 @@ import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/r
 import { AuthProvider } from "@/lib/auth-context";
 import { WelcomeSplash } from "@/components/WelcomeSplash";
 import { lazy, Suspense, useEffect as useEffectRoot, useState as useStateRoot } from "react";
+import { initAnalytics } from "@/lib/analytics";
 const EmotionChat = lazy(() => import("@/components/EmotionChat").then((m) => ({ default: m.EmotionChat })));
 function ClientChat() {
   const [ready, setReady] = useStateRoot(false);
