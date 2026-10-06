@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import { storage } from "@/lib/storage";
@@ -88,6 +88,13 @@ function Journal() {
         <p className="text-[11px] leading-relaxed text-ink-light/80 text-center px-2">
           Kept entries stay only on this device and never leave it. They're erased when you sign out.
         </p>
+
+        <Link
+          to="/journal-prompts"
+          className="text-center text-xs font-bold text-clay active:scale-95 transition-transform"
+        >
+          Stuck? Try one of 35 journal prompts →
+        </Link>
 
 
         <div className="flex gap-3">

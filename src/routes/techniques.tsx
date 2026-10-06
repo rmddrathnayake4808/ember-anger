@@ -90,6 +90,19 @@ function TechniquesPage() {
         </section>
 
         <Link
+          to="/journal-prompts"
+          className="shrink-0 rounded-[20px] p-3 border border-clay/20 bg-sand-50/60 flex items-center justify-between gap-3 active:scale-[0.98] transition-transform"
+        >
+          <div className="flex-1 min-w-0">
+            <h2 className="font-display font-bold text-ink text-sm">35 anger journal prompts</h2>
+            <p className="text-[10px] text-ink-light text-pretty mt-0.5">
+              Therapeutic prompts to understand triggers and cool hot thoughts.
+            </p>
+          </div>
+          <span className="text-clay text-xs font-bold shrink-0">Read →</span>
+        </Link>
+
+        <Link
           to="/cbt-anger-management"
           className="shrink-0 rounded-[20px] p-3 border border-flow/30 bg-flow-soft/60 flex items-center justify-between gap-3 active:scale-[0.98] transition-transform"
         >
