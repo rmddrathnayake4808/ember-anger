@@ -26,7 +26,19 @@ export const Route = createFileRoute("/api/chat")({
         if (!Array.isArray(messages) || messages.length === 0) {
           return new Response("Messages are required", { status: 400 });
         }
-        const uiMessages = messages as UIMessage[];
+        if (messages.length > 60) return new Response("Too many messages", { status: 400 });
+        const uiMessages: UIMessage[] = [];
+        for (const m of messages as Array<Record<string, unknown>>) {
+          const role = m?.role;
+          if (role !== "user" && role !== "assistant") return new Response("Invalid message role", { status: 400 });
+          const parts = Array.isArray(m.parts) ? m.parts : [];
+          const textParts = parts
+            .filter((p: any) => p && p.type === "text" && typeof p.text === "string")
+            .map((p: any) => ({ type: "text" as const, text: String(p.text).slice(0, 4000) }));
+          if (textParts.length === 0) continue;
+          uiMessages.push({ id: typeof m.id === "string" ? m.id.slice(0, 64) : crypto.randomUUID(), role, parts: textParts });
+        }
+        if (uiMessages.length === 0) return new Response("Messages are required", { status: 400 });
 
         const key = process.env["LOVABLE_API_KEY"];
         if (!key) return new Response("AI is not configured for this project yet.", { status: 500 });
