@@ -44,6 +44,7 @@ function SignUp() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
+  const [agreed, setAgreed] = useState(false);
 
   useEffect(() => {
     if (user) navigate({ to: "/" });
@@ -53,6 +54,10 @@ function SignUp() {
     e.preventDefault();
     setError(null);
     setInfo(null);
+    if (!agreed) {
+      setError("Please agree to the Terms and Privacy Policy to continue.");
+      return;
+    }
     setLoading(true);
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -77,6 +82,10 @@ function SignUp() {
 
   const onGoogle = async () => {
     setError(null);
+    if (!agreed) {
+      setError("Please agree to the Terms and Privacy Policy to continue.");
+      return;
+    }
     setLoading(true);
     try {
       const result = await signInWithGoogle();
@@ -105,6 +114,14 @@ function SignUp() {
         <Field label="Name" value={name} onChange={setName} placeholder="What should we call you?" autoComplete="name" />
         <Field label="Email" type="email" value={email} onChange={setEmail} placeholder="you@email.com" autoComplete="email" required />
         <Field label="Password" type="password" value={password} onChange={setPassword} placeholder="At least 6 characters" autoComplete="new-password" required />
+        <label className="flex items-start gap-2 text-xs text-ink-light">
+          <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} className="mt-0.5 size-4 accent-[var(--clay)]" required />
+          <span>
+            I agree to the{" "}
+            <Link to="/terms" className="font-bold text-clay underline">Terms</Link> and{" "}
+            <Link to="/privacy" className="font-bold text-clay underline">Privacy Policy</Link>.
+          </span>
+        </label>
         {error && <p className="text-sm font-medium text-destructive">{error}</p>}
         {info && <p className="text-sm font-medium text-flow">{info}</p>}
         <button
