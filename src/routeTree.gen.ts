@@ -17,6 +17,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SigninRouteImport } from './routes/signin'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as LearnRouteImport } from './routes/learn'
 import { Route as JournalPromptsRouteImport } from './routes/journal-prompts'
 import { Route as JournalRouteImport } from './routes/journal'
@@ -65,6 +66,11 @@ const SigninRoute = SigninRouteImport.update({
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LearnRoute = LearnRouteImport.update({
@@ -122,6 +128,7 @@ export interface FileRoutesByFullPath {
   '/journal': typeof JournalRoute
   '/journal-prompts': typeof JournalPromptsRoute
   '/learn': typeof LearnRoute
+  '/privacy': typeof PrivacyRoute
   '/settings': typeof SettingsRoute
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
@@ -141,6 +148,7 @@ export interface FileRoutesByTo {
   '/journal': typeof JournalRoute
   '/journal-prompts': typeof JournalPromptsRoute
   '/learn': typeof LearnRoute
+  '/privacy': typeof PrivacyRoute
   '/settings': typeof SettingsRoute
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
@@ -161,6 +169,7 @@ export interface FileRoutesById {
   '/journal': typeof JournalRoute
   '/journal-prompts': typeof JournalPromptsRoute
   '/learn': typeof LearnRoute
+  '/privacy': typeof PrivacyRoute
   '/settings': typeof SettingsRoute
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
@@ -182,6 +191,7 @@ export interface FileRouteTypes {
     | '/journal'
     | '/journal-prompts'
     | '/learn'
+    | '/privacy'
     | '/settings'
     | '/signin'
     | '/signup'
@@ -201,6 +211,7 @@ export interface FileRouteTypes {
     | '/journal'
     | '/journal-prompts'
     | '/learn'
+    | '/privacy'
     | '/settings'
     | '/signin'
     | '/signup'
@@ -220,6 +231,7 @@ export interface FileRouteTypes {
     | '/journal'
     | '/journal-prompts'
     | '/learn'
+    | '/privacy'
     | '/settings'
     | '/signin'
     | '/signup'
@@ -240,6 +252,7 @@ export interface RootRouteChildren {
   JournalRoute: typeof JournalRoute
   JournalPromptsRoute: typeof JournalPromptsRoute
   LearnRoute: typeof LearnRoute
+  PrivacyRoute: typeof PrivacyRoute
   SettingsRoute: typeof SettingsRoute
   SigninRoute: typeof SigninRoute
   SignupRoute: typeof SignupRoute
@@ -308,6 +321,13 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/learn': {
@@ -384,6 +404,7 @@ const rootRouteChildren: RootRouteChildren = {
   JournalRoute: JournalRoute,
   JournalPromptsRoute: JournalPromptsRoute,
   LearnRoute: LearnRoute,
+  PrivacyRoute: PrivacyRoute,
   SettingsRoute: SettingsRoute,
   SigninRoute: SigninRoute,
   SignupRoute: SignupRoute,

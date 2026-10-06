@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Wind, MessageSquare, Trash2, Footprints, ScanFace, Zap } from "lucide-react";
+import { Wind, MessageSquare, Trash2, Footprints, ScanFace, Zap, Phone, BookOpen, Lightbulb, PenLine, Brain, Settings as SettingsIcon, AlertTriangle } from "lucide-react";
+import { detectCountry, emergencyNumber } from "@/lib/emergency";
 import { AppShell } from "@/components/AppShell";
 import { storage } from "@/lib/storage";
 import { useSystemTheme } from "@/hooks/use-system-theme";
@@ -61,6 +62,8 @@ function Home() {
   const [streak, setStreak] = useState(0);
   const [name, setName] = useState("friend");
   const [greeting, setGreeting] = useState("Hello");
+  const [sos, setSos] = useState("112");
+  useEffect(() => setSos(emergencyNumber(detectCountry())), []);
 
   useEffect(() => {
     setTension(storage.getTension());
@@ -74,6 +77,13 @@ function Home() {
     setTension(v);
     storage.setTension(v);
     setStreak(storage.getStreak());
+    if (v > 7 && typeof Notification !== "undefined") {
+      const notify = () => {
+        try { new Notification("Ember: tension is high", { body: "Pause. Try a breathing round or another outlet.", icon: "/favicon.png" }); } catch {}
+      };
+      if (Notification.permission === "granted") notify();
+      else if (Notification.permission === "default") Notification.requestPermission().then((p) => p === "granted" && notify());
+    }
   };
 
   const fillPct = (tension / 10) * 100;
@@ -91,9 +101,15 @@ function Home() {
             </h1>
           </div>
 
-          <div className="bg-flow-soft border border-flow/30 rounded-full px-3 py-1.5 flex items-center gap-2 shrink-0">
-            <span className="size-1.5 rounded-full bg-flow" />
-            <span className="text-xs font-semibold text-flow tabular-nums">{streak}d</span>
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="bg-flow-soft border border-flow/30 rounded-full px-2.5 py-1.5 text-xs font-semibold text-flow tabular-nums">{streak}d</span>
+            <a
+              href={`tel:${sos}`}
+              aria-label={`Call emergency services ${sos}`}
+              className="bg-destructive text-destructive-foreground rounded-full px-3 py-2 flex items-center gap-1.5 font-display font-bold text-xs shadow-[var(--shadow-soft)] active:scale-95 transition-transform"
+            >
+              <Phone className="size-3.5" /> SOS {sos}
+            </a>
           </div>
         </header>
 
@@ -133,6 +149,16 @@ function Home() {
           </p>
         </section>
 
+        {tension > 7 && (
+          <div role="alert" className="rounded-[18px] border border-destructive/40 bg-destructive/10 p-3 flex gap-2 items-start">
+            <AlertTriangle className="size-4 text-destructive shrink-0 mt-0.5" />
+            <p className="text-xs text-ink">
+              Your tension is high. Pause and choose an outlet below —{" "}
+              <Link to="/breathe" className="font-bold text-destructive underline">breathe now</Link>.
+            </p>
+          </div>
+        )}
+
         {/* Primary CTA */}
         <Link
           to="/breathe"
@@ -144,38 +170,23 @@ function Home() {
           <Zap className="size-4 text-primary-foreground" strokeWidth={2.5} />
         </Link>
 
-        {/* Channel grid */}
+        {/* All tools */}
         <div className="grid grid-cols-4 gap-2">
-          <Link
-            to="/breathe"
-            className="col-span-2 row-span-2 rounded-[24px] p-4 border border-clay/25 bg-linear-to-br from-sand-50 to-sand-100 flex flex-col justify-between active:scale-[0.98] transition-transform"
-          >
-            <span className="size-9 rounded-xl bg-flow-soft text-flow flex items-center justify-center">
-              <Wind className="size-5" />
-            </span>
-            <span>
-              <span className="block font-display font-bold text-ink text-lg">Breathe</span>
-              <span className="block text-[10px] text-ink-light">Guided rhythmic release</span>
-            </span>
-          </Link>
-
+          <Tile to="/breathe" label="Breathe" icon={<Wind className="size-4" />} tone="text-flow bg-flow-soft" />
           <Tile to="/vent" label="Vent" icon={<MessageSquare className="size-4" />} tone="text-flow bg-flow-soft" />
           <Tile to="/journal" label="Shred" icon={<Trash2 className="size-4" />} tone="text-destructive bg-destructive/15" />
           <Tile to="/walk" label="Walk" icon={<Footprints className="size-4" />} tone="text-clay bg-clay/15" />
           <Tile to="/face" label="Face" icon={<ScanFace className="size-4" />} tone="text-ink bg-ink/10" />
+          <Tile to="/learn" label="Learn" icon={<BookOpen className="size-4" />} tone="text-flow bg-flow-soft" />
+          <Tile to="/techniques" label="Tips" icon={<Lightbulb className="size-4" />} tone="text-clay bg-clay/15" />
+          <Tile to="/journal-prompts" label="Prompts" icon={<PenLine className="size-4" />} tone="text-ink bg-ink/10" />
+          <Tile to="/cbt-anger-management" label="CBT" icon={<Brain className="size-4" />} tone="text-flow bg-flow-soft" />
+          <Tile to="/settings" label="Settings" icon={<SettingsIcon className="size-4" />} tone="text-ink bg-ink/10" />
         </div>
 
-        <section className="rounded-[20px] p-3 border border-clay/20 bg-sand-50/60 flex items-start gap-3">
-          <span className="size-7 rounded-full bg-flow-soft text-flow flex items-center justify-center font-display font-bold shrink-0 text-sm">
-            ✓
-          </span>
-          <span>
-            <span className="block font-display font-bold text-ink text-xs">You showed up today.</span>
-            <span className="block text-[10px] text-ink-light text-pretty mt-0.5">
-              Awareness is the first release. Each check-in builds a steadier you.
-            </span>
-          </span>
-        </section>
+        <p className="mt-auto text-center text-[11px] text-ink-light text-pretty">
+          If you need professional advice, seek medical assistance.
+        </p>
       </div>
     </AppShell>
   );
@@ -195,10 +206,10 @@ function Tile({
   return (
     <Link
       to={to}
-      className="bg-sand-50/60 p-3 rounded-[20px] border border-clay/20 flex flex-col gap-2 active:scale-95 transition-transform"
+      className="bg-sand-50/60 p-2.5 rounded-[18px] border border-clay/20 flex flex-col items-center gap-1.5 active:scale-95 transition-transform"
     >
       <span className={`size-7 rounded-lg flex items-center justify-center ${tone}`}>{icon}</span>
-      <span className="font-display font-bold text-ink text-sm">{label}</span>
+      <span className="font-display font-bold text-ink text-xs">{label}</span>
     </Link>
   );
 }
