@@ -64,6 +64,14 @@ function Home() {
   const [greeting, setGreeting] = useState("Hello");
   const [sos, setSos] = useState("112");
   useEffect(() => setSos(emergencyNumber(detectCountry())), []);
+  useEffect(() => {
+    const root = document.documentElement;
+    const c = tensionColor(tension);
+    root.style.setProperty("--clay", c);
+    root.style.setProperty("--flow", c);
+    root.style.setProperty("--primary", c);
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", c);
+  }, [tension]);
 
   useEffect(() => {
     setTension(storage.getTension());
