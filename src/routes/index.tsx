@@ -67,9 +67,16 @@ function Home() {
   useEffect(() => {
     const root = document.documentElement;
     const c = tensionColor(tension);
+    const hue = tensionHue(tension);
+    const dark = root.classList.contains("dark");
     root.style.setProperty("--clay", c);
     root.style.setProperty("--flow", c);
     root.style.setProperty("--primary", c);
+    root.style.setProperty("--flow-soft", `oklch(0.73 0.09 ${hue} / 0.18)`);
+    root.style.setProperty(
+      "--sand-50",
+      dark ? `oklch(0.34 0.05 ${hue})` : `oklch(0.96 0.03 ${hue})`,
+    );
     document.querySelector('meta[name="theme-color"]')?.setAttribute("content", c);
   }, [tension]);
 
@@ -147,7 +154,7 @@ function Home() {
             />
             <div
               className="absolute size-6 rounded-full border-[3px] border-sand-50 z-10 transition-all duration-300 pointer-events-none shadow-[var(--shadow-soft)]"
-              style={{ left: `calc(${fillPct}% - 0.75rem)`, background: tensionColor(tension) }}
+              style={{ left: `calc(${fillPct}% - 0.75rem)`, background: "oklch(1 0 0)" }}
             />
 
           </div>
@@ -213,9 +220,14 @@ function Tile({
 }
 
 /** Green (0) → yellow (5) → red (10). */
+function tensionHue(t: number) {
+  const k = Math.max(0, Math.min(10, t)) / 10;
+  return (145 - k * 118).toFixed(1);
+}
+
 function tensionColor(t: number) {
   const k = Math.max(0, Math.min(10, t)) / 10;
-  const hue = 145 - k * 118;
+  const hue = tensionHue(t);
   const l = k < 0.5 ? 0.72 + k * 0.28 : 0.86 - (k - 0.5) * 0.48;
-  return `oklch(${l.toFixed(3)} ${(0.17 + k * 0.04).toFixed(3)} ${hue.toFixed(1)})`;
+  return `oklch(${l.toFixed(3)} ${(0.17 + k * 0.04).toFixed(3)} ${hue})`;
 }
