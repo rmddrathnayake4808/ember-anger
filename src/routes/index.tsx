@@ -64,6 +64,14 @@ function Home() {
   const [greeting, setGreeting] = useState("Hello");
   const [sos, setSos] = useState("112");
   useEffect(() => setSos(emergencyNumber(detectCountry())), []);
+  useEffect(() => {
+    const root = document.documentElement;
+    const c = tensionColor(tension);
+    root.style.setProperty("--clay", c);
+    root.style.setProperty("--flow", c);
+    root.style.setProperty("--primary", c);
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", c);
+  }, [tension]);
 
   useEffect(() => {
     setTension(storage.getTension());
@@ -124,11 +132,10 @@ function Home() {
             </span>
           </div>
 
-          <div className="relative h-7 rounded-full bg-sand-200/70 border border-clay/25 flex items-center px-1 shadow-[inset_0_2px_10px_oklch(0.22_0.06_250/0.2)]">
-            <div
-              className="absolute left-1 top-1 bottom-1 rounded-full bg-linear-to-r from-flow to-clay transition-all duration-300 shadow-[0_0_16px_var(--flow-soft)]"
-              style={{ width: `calc(${fillPct}% - 0.5rem)` }}
-            />
+          <div
+            className="relative h-7 rounded-full border border-clay/25 flex items-center px-1 shadow-[inset_0_2px_10px_oklch(0.22_0.06_250/0.2)]"
+            style={{ background: "linear-gradient(to right, oklch(0.72 0.17 145), oklch(0.86 0.17 95), oklch(0.62 0.21 27))" }}
+          >
             <input
               type="range"
               min={0}
@@ -139,9 +146,10 @@ function Home() {
               aria-label="Tension level"
             />
             <div
-              className="absolute size-6 rounded-full bg-sand-50 border-[3px] border-clay z-10 transition-all duration-300 pointer-events-none shadow-[var(--shadow-soft)]"
-              style={{ left: `calc(${fillPct}% - 0.75rem)` }}
+              className="absolute size-6 rounded-full border-[3px] border-sand-50 z-10 transition-all duration-300 pointer-events-none shadow-[var(--shadow-soft)]"
+              style={{ left: `calc(${fillPct}% - 0.75rem)`, background: tensionColor(tension) }}
             />
+
           </div>
 
           <p className="mt-2 text-xs leading-snug italic text-clay text-pretty">
@@ -202,4 +210,12 @@ function Tile({
       <span className="font-display font-bold text-ink text-xs">{label}</span>
     </Link>
   );
+}
+
+/** Green (0) → yellow (5) → red (10). */
+function tensionColor(t: number) {
+  const k = Math.max(0, Math.min(10, t)) / 10;
+  const hue = 145 - k * 118;
+  const l = k < 0.5 ? 0.72 + k * 0.28 : 0.86 - (k - 0.5) * 0.48;
+  return `oklch(${l.toFixed(3)} ${(0.17 + k * 0.04).toFixed(3)} ${hue.toFixed(1)})`;
 }
