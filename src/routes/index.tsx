@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Wind, MessageSquare, Trash2, Footprints, ScanFace, Zap, Phone, BookOpen, Lightbulb, PenLine, Brain, Settings as SettingsIcon, AlertTriangle } from "lucide-react";
+import { Wind, MessageSquare, Trash2, Footprints, ScanFace, Phone, BookOpen, Lightbulb, PenLine, Brain, Settings as SettingsIcon, AlertTriangle } from "lucide-react";
 import { detectCountry, emergencyNumber } from "@/lib/emergency";
 import { AppShell } from "@/components/AppShell";
 import { storage } from "@/lib/storage";
@@ -159,16 +159,6 @@ function Home() {
           </div>
         )}
 
-        {/* Primary CTA */}
-        <Link
-          to="/breathe"
-          className="w-full bg-clay rounded-[18px] py-3.5 flex items-center justify-center gap-2 shadow-[var(--shadow-press)] transition-transform duration-150 active:translate-y-2 active:shadow-[var(--shadow-press-active)]"
-        >
-          <span className="font-display font-bold text-base uppercase tracking-[0.12em] text-primary-foreground">
-            I need an outlet
-          </span>
-          <Zap className="size-4 text-primary-foreground" strokeWidth={2.5} />
-        </Link>
 
         {/* All tools */}
         <div className="grid grid-cols-4 gap-2">
