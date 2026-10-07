@@ -34,6 +34,17 @@ export const Route = createFileRoute("/signin")({
   component: SignIn,
 });
 
+const GENDERS = ["Male", "Female", "Other"] as const;
+const AGE_GROUPS = [
+  "Child (6–10)",
+  "Pre-teen / Tween (10–13)",
+  "Teenager / Adolescent (13–18)",
+  "Young Adult (18–40)",
+  "Middle-aged Adult (40–60)",
+  "Senior / Older Adult (60–90)",
+  "Centenarian (90+)",
+];
+
 function SignIn() {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -41,6 +52,9 @@ function SignIn() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [anonOpen, setAnonOpen] = useState(false);
+  const [gender, setGender] = useState("");
+  const [ageGroup, setAgeGroup] = useState("");
 
   useEffect(() => {
     if (user) navigate({ to: "/" });
@@ -51,6 +65,21 @@ function SignIn() {
     setError(null);
     setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({ email, password });
+    setLoading(false);
+    if (error) {
+      setError(error.message);
+      return;
+    }
+    navigate({ to: "/" });
+  };
+
+  const onAnon = async () => {
+    if (!GENDERS.includes(gender as never) || !AGE_GROUPS.includes(ageGroup)) return;
+    setError(null);
+    setLoading(true);
+    const { error } = await supabase.auth.signInAnonymously({
+      options: { data: { gender, age_group: ageGroup, display_name: "Guest" } },
+    });
     setLoading(false);
     if (error) {
       setError(error.message);
@@ -108,6 +137,54 @@ function SignIn() {
         <GoogleIcon />
         Continue with Google
       </button>
+
+      {!anonOpen ? (
+        <button
+          type="button"
+          onClick={() => setAnonOpen(true)}
+          disabled={loading}
+          className="w-full bg-transparent text-ink-light border border-dashed border-sand-200 rounded-[24px] py-3 font-display font-bold active:scale-[0.98] transition-transform"
+        >
+          Continue anonymously
+        </button>
+      ) : (
+        <div className="flex flex-col gap-3 bg-sand-50 border border-sand-200 rounded-[20px] p-4">
+          <span className="text-xs font-bold text-ink-light uppercase tracking-widest">Gender</span>
+          <div className="flex gap-2">
+            {GENDERS.map((g) => (
+              <button
+                key={g}
+                type="button"
+                onClick={() => setGender(g)}
+                className={`flex-1 rounded-full py-2 text-sm font-bold border transition-colors ${gender === g ? "bg-clay text-sand-50 border-clay" : "border-sand-200 text-ink"}`}
+              >
+                {g}
+              </button>
+            ))}
+          </div>
+          <label className="flex flex-col gap-2">
+            <span className="text-xs font-bold text-ink-light uppercase tracking-widest">Age group</span>
+            <select
+              value={ageGroup}
+              onChange={(e) => setAgeGroup(e.target.value)}
+              className="w-full bg-sand-100 border border-sand-200 rounded-[16px] px-4 py-3 text-ink outline-none focus:border-clay"
+            >
+              <option value="">Select…</option>
+              {AGE_GROUPS.map((a) => (
+                <option key={a} value={a}>{a}</option>
+              ))}
+            </select>
+          </label>
+          <button
+            type="button"
+            onClick={onAnon}
+            disabled={loading || !gender || !ageGroup}
+            className="w-full bg-clay text-sand-50 rounded-[20px] py-3 font-display font-extrabold disabled:opacity-50"
+          >
+            {loading ? "Starting…" : "Start anonymously"}
+          </button>
+        </div>
+      )}
     </AuthScaffold>
   );
 }
