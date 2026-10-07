@@ -211,3 +211,11 @@ function Tile({
     </Link>
   );
 }
+
+/** Green (0) → yellow (5) → red (10). */
+function tensionColor(t: number) {
+  const k = Math.max(0, Math.min(10, t)) / 10;
+  const hue = 145 - k * 118;
+  const l = k < 0.5 ? 0.72 + k * 0.28 : 0.86 - (k - 0.5) * 0.48;
+  return `oklch(${l.toFixed(3)} ${(0.17 + k * 0.04).toFixed(3)} ${hue.toFixed(1)})`;
+}
