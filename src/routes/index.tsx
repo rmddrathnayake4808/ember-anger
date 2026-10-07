@@ -124,11 +124,10 @@ function Home() {
             </span>
           </div>
 
-          <div className="relative h-7 rounded-full bg-sand-200/70 border border-clay/25 flex items-center px-1 shadow-[inset_0_2px_10px_oklch(0.22_0.06_250/0.2)]">
-            <div
-              className="absolute left-1 top-1 bottom-1 rounded-full bg-linear-to-r from-flow to-clay transition-all duration-300 shadow-[0_0_16px_var(--flow-soft)]"
-              style={{ width: `calc(${fillPct}% - 0.5rem)` }}
-            />
+          <div
+            className="relative h-7 rounded-full border border-clay/25 flex items-center px-1 shadow-[inset_0_2px_10px_oklch(0.22_0.06_250/0.2)]"
+            style={{ background: "linear-gradient(to right, oklch(0.72 0.17 145), oklch(0.86 0.17 95), oklch(0.62 0.21 27))" }}
+          >
             <input
               type="range"
               min={0}
@@ -139,9 +138,10 @@ function Home() {
               aria-label="Tension level"
             />
             <div
-              className="absolute size-6 rounded-full bg-sand-50 border-[3px] border-clay z-10 transition-all duration-300 pointer-events-none shadow-[var(--shadow-soft)]"
-              style={{ left: `calc(${fillPct}% - 0.75rem)` }}
+              className="absolute size-6 rounded-full border-[3px] border-sand-50 z-10 transition-all duration-300 pointer-events-none shadow-[var(--shadow-soft)]"
+              style={{ left: `calc(${fillPct}% - 0.75rem)`, background: tensionColor(tension) }}
             />
+
           </div>
 
           <p className="mt-2 text-xs leading-snug italic text-clay text-pretty">
