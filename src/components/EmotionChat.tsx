@@ -18,6 +18,7 @@ import { Shimmer } from "@/components/ai-elements/shimmer";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { clearChatHistory, loadChatHistory } from "@/lib/chat.functions";
+import { cacheRows, getCachedRows, clearCachedTable } from "@/lib/offline-cache";
 import emberMark from "@/assets/ember-favicon.png";
 
 const STARTERS = [
@@ -50,10 +51,16 @@ export function EmotionChat() {
     let cancelled = false;
     loadChatHistory()
       .then((rows) => {
-        if (!cancelled) setInitial(rows as unknown as UIMessage[]);
+        if (!cancelled) {
+          setInitial(rows as unknown as UIMessage[]);
+          void cacheRows("chat_messages", rows as unknown as Record<string, unknown>[]);
+        }
       })
-      .catch(() => {
-        if (!cancelled) setInitial([]);
+      .catch(async () => {
+        if (!cancelled) {
+          const cached = await getCachedRows<Record<string, unknown>>("chat_messages");
+          setInitial(cached as unknown as UIMessage[]);
+        }
       });
     return () => {
       cancelled = true;
@@ -167,6 +174,7 @@ function ChatPanel({
       await clearChatHistory();
       setMessages([]);
       onCleared();
+      void clearCachedTable("chat_messages");
     } catch {
       setError("Couldn't clear the chat — try again.");
     }

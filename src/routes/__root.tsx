@@ -2,11 +2,21 @@ import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/r
 import { AuthProvider } from "@/lib/auth-context";
 import { lazy, Suspense, useEffect as useEffectRoot, useState as useStateRoot } from "react";
 import { initAnalytics } from "@/lib/analytics";
+import { InstallPrompt } from "@/components/InstallPrompt";
 const EmotionChat = lazy(() => import("@/components/EmotionChat").then((m) => ({ default: m.EmotionChat })));
 function ClientChat() {
   const [ready, setReady] = useStateRoot(false);
   useEffectRoot(() => setReady(true), []);
   return ready ? <Suspense fallback={null}><EmotionChat /></Suspense> : null;
+}
+
+function ServiceWorkerRegister() {
+  useEffectRoot(() => {
+    if ("serviceWorker" in navigator && import.meta.env.PROD) {
+      navigator.serviceWorker.register("/sw.js").catch(() => {});
+    }
+  }, []);
+  return null;
 }
 
 import appCss from "../styles.css?url";
@@ -38,7 +48,12 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "google-site-verification", content: "Ry0KEq7Geifgqb-AtCoB-WfN2k6Qgrp9uIOhQl2B9_4" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "viewport", content: "width=device-width, initial-scale=1, maximum-scale=5" },
+      { name: "theme-color", content: "#2d8a9e" },
+      { name: "mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "default" },
+      { name: "apple-mobile-web-app-title", content: "Ember" },
       { title: "Ember — Release anger calmly" },
       { name: "description", content: "Track tension, breathe through triggers, vent privately, and journal to understand anger. Ember turns intense moments into calm action." },
       { name: "author", content: "Ember" },
@@ -54,6 +69,7 @@ export const Route = createRootRoute({
     links: [
       { rel: "icon", type: "image/png", href: "/favicon.png" },
       { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
+      { rel: "manifest", href: "/manifest.json" },
       { rel: "preload", as: "image", href: "/favicon.png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
@@ -117,6 +133,8 @@ function RootComponent() {
     <AuthProvider>
       <Outlet />
       <ClientChat />
+      <ServiceWorkerRegister />
+      <InstallPrompt />
     </AuthProvider>
   );
 }

@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { appendCachedRow, cacheRows, getCachedRows, clearCachedTable } from "@/lib/offline-cache";
 
 export type CloudJournalEntry = {
   id: string;
@@ -18,7 +19,12 @@ export async function getCheckIns(userId: string): Promise<CloudCheckIn[]> {
     .eq("user_id", userId)
     .order("date", { ascending: false });
 
-  if (error) throw new Error("Could not load check-ins.");
+  if (error) {
+    const cached = await getCachedRows<CloudCheckIn>("check_ins");
+    if (cached.length > 0) return cached.sort((a, b) => b.date.localeCompare(a.date));
+    throw new Error("Could not load check-ins.");
+  }
+  void cacheRows("check_ins", data as unknown as Record<string, unknown>[]);
   return data;
 }
 
@@ -27,16 +33,14 @@ export async function saveCheckIn(
   level: number,
 ): Promise<void> {
   const today = new Date().toISOString().slice(0, 10);
-  const { error } = await supabase.from("check_ins").upsert(
-    {
-      user_id: userId,
-      date: today,
-      level: Math.max(0, Math.min(10, level)),
-    },
-    { onConflict: "user_id,date" },
-  );
+  const row = { user_id: userId, date: today, level: Math.max(0, Math.min(10, level)) };
+  const { error } = await supabase.from("check_ins").upsert(row, { onConflict: "user_id,date" });
 
-  if (error) throw new Error("Could not save this check-in.");
+  if (error) {
+    void appendCachedRow("check_ins", row);
+    return;
+  }
+  void appendCachedRow("check_ins", row);
 }
 
 export async function getJournalEntries(
@@ -48,7 +52,16 @@ export async function getJournalEntries(
     .eq("user_id", userId)
     .order("created_at", { ascending: false });
 
-  if (error) throw new Error("Could not load journal entries.");
+  if (error) {
+    const cached = await getCachedRows<{ id: string; created_at: string; text: string }>("journal_entries");
+    if (cached.length > 0) {
+      return cached
+        .sort((a, b) => b.created_at.localeCompare(a.created_at))
+        .map((entry) => ({ id: entry.id, createdAt: entry.created_at, text: entry.text }));
+    }
+    throw new Error("Could not load journal entries.");
+  }
+  void cacheRows("journal_entries", data as unknown as Record<string, unknown>[]);
   return data.map((entry) => ({
     id: entry.id,
     createdAt: entry.created_at,
@@ -60,12 +73,15 @@ export async function addJournalEntry(
   userId: string,
   text: string,
 ): Promise<void> {
-  const { error } = await supabase.from("journal_entries").insert({
+  const { data, error } = await supabase.from("journal_entries").insert({
     user_id: userId,
     text: text.trim(),
-  });
+  }).select("id, created_at, text").single();
 
   if (error) throw new Error("Could not save this journal entry.");
+  if (data) {
+    void appendCachedRow("journal_entries", data as unknown as Record<string, unknown>);
+  }
 }
 
 export async function clearUserData(userId: string): Promise<void> {
@@ -77,6 +93,8 @@ export async function clearUserData(userId: string): Promise<void> {
   if (journalResult.error || checkInResult.error) {
     throw new Error("Could not clear your saved data.");
   }
+  void clearCachedTable("journal_entries");
+  void clearCachedTable("check_ins");
 }
 
 export function getCheckInStreak(checkIns: CloudCheckIn[]): number {
