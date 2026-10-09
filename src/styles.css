@@ -160,6 +160,11 @@
 }
 
 @keyframes navlabel {
-  from { max-width: 0; opacity: 0; }
-  to { max-width: 5rem; opacity: 1; }
+  from { max-width: 0; opacity: 0; transform: translateX(-4px); }
+  to { max-width: 5rem; opacity: 1; transform: translateX(0); }
+}
+
+@keyframes nav-rise {
+  from { transform: translateY(120%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
