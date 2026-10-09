@@ -5,6 +5,7 @@ import { AppShell } from "@/components/AppShell";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 import { getStoredTheme, setStoredTheme, type ThemeMode } from "@/lib/theme";
+import { clearUserData, getCheckIns, getJournalEntries } from "@/lib/user-data";
 import { storage } from "@/lib/storage";
 
 export const Route = createFileRoute("/settings")({
@@ -87,20 +88,34 @@ function Settings() {
   const [checkInCount, setCheckInCount] = useState(0);
   const [clearing, setClearing] = useState(false);
   const [clearedFlash, setClearedFlash] = useState(false);
+  const [dataError, setDataError] = useState<string | null>(null);
 
   useEffect(() => {
-    setJournalCount(storage.getJournal().length);
-    setCheckInCount(storage.getCheckIns().length);
-  }, []);
+    if (!user) return;
+    void Promise.all([getJournalEntries(user.id), getCheckIns(user.id)])
+      .then(([entries, checkIns]) => {
+        setJournalCount(entries.length);
+        setCheckInCount(checkIns.length);
+      })
+      .catch(() => setDataError("Your saved data could not be loaded."));
+  }, [user]);
 
-  const clearLocalData = () => {
+  const clearSavedData = async () => {
+    if (!user) return;
     setClearing(true);
-    storage.clearAll();
-    setClearing(false);
-    setJournalCount(0);
-    setCheckInCount(0);
-    setClearedFlash(true);
-    setTimeout(() => setClearedFlash(false), 1500);
+    setDataError(null);
+    try {
+      await clearUserData(user.id);
+      storage.clearAll();
+      setJournalCount(0);
+      setCheckInCount(0);
+      setClearedFlash(true);
+      setTimeout(() => setClearedFlash(false), 1500);
+    } catch {
+      setDataError("Your saved data could not be cleared.");
+    } finally {
+      setClearing(false);
+    }
   };
 
   return (
@@ -174,25 +189,28 @@ function Settings() {
               <Shield className="size-4" />
             </div>
             <p className="text-[11px] text-ink-light text-pretty leading-snug">
-              Your tension check-ins, journal entries, and personal settings are saved to your
-              device's internal storage. They stay with you and are erased when you sign out.
+              Your tension check-ins and journal entries are securely saved to your Ember account
+              database. Only you can access them, and they remain available when you sign in again.
             </p>
           </div>
           <div className="flex items-center justify-between text-xs">
-            <span className="text-ink-light">Journal entries on device</span>
+            <span className="text-ink-light">Journal entries in account</span>
             <span className="font-bold text-ink tabular-nums">{journalCount}</span>
           </div>
           <div className="flex items-center justify-between text-xs">
-            <span className="text-ink-light">Tension check-ins on device</span>
+            <span className="text-ink-light">Tension check-ins in account</span>
             <span className="font-bold text-ink tabular-nums">{checkInCount}</span>
           </div>
+          {dataError && (
+            <p role="alert" className="text-xs text-destructive text-center">{dataError}</p>
+          )}
           <button
-            onClick={clearLocalData}
+            onClick={() => void clearSavedData()}
             disabled={clearing}
             className="w-full bg-destructive/10 text-destructive border border-destructive/30 rounded-[18px] py-3 text-sm font-display font-bold active:scale-[0.98] transition-transform disabled:opacity-50 flex items-center justify-center gap-2"
           >
             <Trash2 className="size-4" />
-            {clearedFlash ? "Cleared" : "Clear local data"}
+            {clearedFlash ? "Cleared" : "Clear saved data"}
           </button>
           <Link
             to="/privacy"

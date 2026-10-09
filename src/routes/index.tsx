@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import { Wind, MessageSquare, Trash2, Footprints, ScanFace, Phone, BookOpen, Lightbulb, PenLine, Brain, TriangleAlert as AlertTriangle } from "lucide-react";
 import { detectCountry, emergencyNumber } from "@/lib/emergency";
 import { AppShell } from "@/components/AppShell";
-import { storage } from "@/lib/storage";
+import { supabase } from "@/integrations/supabase/client";
+import { getCheckInStreak, getCheckIns, saveCheckIn } from "@/lib/user-data";
 import { useSystemTheme } from "@/hooks/use-system-theme";
 import { useAuth } from "@/lib/auth-context";
 
@@ -63,6 +64,7 @@ function Home() {
   const [name, setName] = useState("friend");
   const [greeting, setGreeting] = useState("Hello");
   const [sos, setSos] = useState("112");
+  const [dataError, setDataError] = useState<string | null>(null);
   useEffect(() => setSos(emergencyNumber(detectCountry())), []);
   useEffect(() => {
     const root = document.documentElement;
@@ -81,17 +83,39 @@ function Home() {
   }, [tension]);
 
   useEffect(() => {
-    setTension(storage.getTension());
-    setStreak(storage.getStreak());
-    setName(storage.getName());
-    const h = new Date().getHours();
-    setGreeting(h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening");
-  }, []);
+    if (!user) return;
+    let active = true;
+
+    const loadDashboard = async () => {
+      try {
+        const [{ data: profile }, checkIns] = await Promise.all([
+          supabase.from("profiles").select("display_name").eq("id", user.id).maybeSingle(),
+          getCheckIns(user.id),
+        ]);
+        if (!active) return;
+        const today = new Date().toISOString().slice(0, 10);
+        setTension(checkIns.find((checkIn) => checkIn.date === today)?.level ?? 5);
+        setStreak(getCheckInStreak(checkIns));
+        setName(profile?.display_name ?? "friend");
+      } catch {
+        if (active) setDataError("Your saved data could not be loaded.");
+      }
+      const h = new Date().getHours();
+      if (active) setGreeting(h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening");
+    };
+
+    void loadDashboard();
+    return () => {
+      active = false;
+    };
+  }, [user]);
 
   const onTensionChange = (v: number) => {
     setTension(v);
-    storage.setTension(v);
-    setStreak(storage.getStreak());
+    if (!user) return;
+    void saveCheckIn(user.id, v)
+      .then(async () => setStreak(getCheckInStreak(await getCheckIns(user.id))))
+      .catch(() => setDataError("Your check-in could not be saved."));
     if (v > 7 && typeof Notification !== "undefined") {
       const notify = () => {
         try { new Notification("Ember: tension is high", { body: "Pause. Try a breathing round or another outlet.", icon: "/favicon.png" }); } catch {}
@@ -163,6 +187,12 @@ function Home() {
             Grounding: {TENSION_MESSAGES[tension]}
           </p>
         </section>
+
+        {dataError && (
+          <p role="alert" className="rounded-[16px] border border-destructive/30 bg-destructive/10 px-3 py-2 text-xs text-destructive">
+            {dataError}
+          </p>
+        )}
 
         {tension > 7 && (
           <div role="alert" className="rounded-[18px] border border-destructive/40 bg-destructive/10 p-3 flex gap-2 items-start">

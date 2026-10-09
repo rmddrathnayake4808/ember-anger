@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { AppShell } from "@/components/AppShell";
-import { storage } from "@/lib/storage";
+import { addJournalEntry, getJournalEntries } from "@/lib/user-data";
 import { useRequireAuth } from "@/hooks/use-require-auth";
 
 export const Route = createFileRoute("/journal")({
@@ -24,15 +24,19 @@ export const Route = createFileRoute("/journal")({
 
 
 function Journal() {
-  useRequireAuth();
+  const { user } = useRequireAuth();
   const [text, setText] = useState("");
   const [shredding, setShredding] = useState(false);
   const [shredded, setShredded] = useState(false);
   const [keepCount, setKeepCount] = useState(0);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    setKeepCount(storage.getJournal().length);
-  }, []);
+    if (!user) return;
+    void getJournalEntries(user.id)
+      .then((entries) => setKeepCount(entries.length))
+      .catch(() => setError("Your journal entries could not be loaded."));
+  }, [user]);
 
   const shred = () => {
     if (!text.trim()) return;
@@ -45,16 +49,27 @@ function Journal() {
     }, 1100);
   };
 
-  const keep = () => {
-    if (!text.trim()) return;
-    storage.addJournal(text);
-    setKeepCount(storage.getJournal().length);
-    setText("");
+  const keep = async () => {
+    if (!text.trim() || !user) return;
+    setError(null);
+    try {
+      await addJournalEntry(user.id, text);
+      setKeepCount((count) => count + 1);
+      setText("");
+    } catch {
+      setError("Your journal entry could not be saved.");
+    }
   };
 
   return (
     <AppShell title="Shred Thoughts">
       <div className="flex-1 flex flex-col px-6 pb-16 pt-2 gap-5">
+        {error && (
+          <p role="alert" className="rounded-[16px] border border-destructive/30 bg-destructive/10 px-3 py-2 text-xs text-destructive text-center">
+            {error}
+          </p>
+        )}
+
         <p className="text-sm text-ink-light text-center text-pretty">
           Write the thing you can't say out loud. Then shred it — or keep it for later.
         </p>
@@ -86,7 +101,7 @@ function Journal() {
         </div>
 
         <p className="text-[11px] leading-relaxed text-ink-light/80 text-center px-2">
-          Kept entries stay only on this device and never leave it. They're erased when you sign out.
+          Kept entries are securely saved to your Ember account and available when you sign in.
         </p>
 
         <Link
@@ -99,7 +114,7 @@ function Journal() {
 
         <div className="flex gap-3">
           <button
-            onClick={keep}
+            onClick={() => void keep()}
             disabled={!text.trim() || shredding}
             className="flex-1 bg-sand-50 text-ink border border-sand-200 rounded-[24px] py-4 font-display font-bold active:scale-95 transition-transform disabled:opacity-40"
           >

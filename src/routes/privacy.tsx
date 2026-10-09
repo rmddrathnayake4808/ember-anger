@@ -24,7 +24,7 @@ function Privacy() {
   return (
     <LegalPage title="Privacy Policy" updated="Last updated October 2026">
       <p>We collect only what Ember needs: your email, display name, and the chat messages you send to the emotion companion, stored securely in your account and visible only to you.</p>
-      <p>Tension check-ins and journal entries stay on your device and are erased when you sign out. Voice recordings are never uploaded and disappear when you leave the screen.</p>
+      <p>Tension check-ins and journal entries are securely saved to your Ember account and remain available when you sign in again. Voice recordings are never uploaded and disappear when you leave the screen.</p>
       <p>Face Check photos are sent once for analysis and are not stored. Chat messages and photos are processed by an AI provider solely to generate responses.</p>
       <p>We use Google Analytics to understand anonymous app usage. We never sell your data.</p>
       <p>You can clear your chat history in the app at any time, or ask us to delete your account and all associated data.</p>

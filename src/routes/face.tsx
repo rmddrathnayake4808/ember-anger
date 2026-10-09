@@ -4,7 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { Camera, RefreshCw, ScanFace, SwitchCamera, Upload } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { useRequireAuth } from "@/hooks/use-require-auth";
-import { storage } from "@/lib/storage";
+import { saveCheckIn } from "@/lib/user-data";
 import { analyzeFaceEmotion } from "@/lib/emotion.functions";
 import type { FaceReading } from "@/lib/emotion.server";
 
@@ -172,10 +172,14 @@ function FaceCheck() {
     fr.readAsDataURL(file);
   };
 
-  const applyToCheckIn = () => {
-    if (!reading) return;
-    storage.setTension(reading.angerLevel);
-    setSaved(true);
+  const applyToCheckIn = async () => {
+    if (!reading || !user) return;
+    try {
+      await saveCheckIn(user.id, reading.angerLevel);
+      setSaved(true);
+    } catch {
+      setError("This check-in could not be saved. Please try again.");
+    }
   };
 
   const reset = () => {
@@ -354,7 +358,7 @@ function FaceCheck() {
 
             <button
               type="button"
-              onClick={applyToCheckIn}
+              onClick={() => void applyToCheckIn()}
               disabled={saved}
               className="w-full mt-auto bg-ink text-sand-50 rounded-[20px] py-3 text-xs font-bold active:scale-[0.98] transition-transform disabled:opacity-70 shrink-0"
             >
