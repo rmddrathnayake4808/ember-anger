@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Wind, MessageSquare, Trash2, Footprints, ScanFace, Phone, BookOpen, Lightbulb, PenLine, Brain, Settings as SettingsIcon, AlertTriangle } from "lucide-react";
+import { Wind, MessageSquare, Trash2, Footprints, ScanFace, Phone, BookOpen, Lightbulb, PenLine, Brain, TriangleAlert as AlertTriangle } from "lucide-react";
 import { detectCountry, emergencyNumber } from "@/lib/emergency";
 import { AppShell } from "@/components/AppShell";
 import { storage } from "@/lib/storage";
@@ -186,7 +186,6 @@ function Home() {
           <Tile to="/techniques" label="Tips" icon={<Lightbulb className="size-4" />} tone="text-clay bg-clay/15" />
           <Tile to="/journal-prompts" label="Prompts" icon={<PenLine className="size-4" />} tone="text-ink bg-ink/10" />
           <Tile to="/cbt-anger-management" label="CBT" icon={<Brain className="size-4" />} tone="text-flow bg-flow-soft" />
-          <Tile to="/settings" label="Settings" icon={<SettingsIcon className="size-4" />} tone="text-ink bg-ink/10" />
         </div>
 
         <p className="mt-auto text-center text-[11px] text-ink-light text-pretty">
