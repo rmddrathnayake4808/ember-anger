@@ -24,7 +24,7 @@ export function AppShell({ children, title, back = true }: { children: ReactNode
           <span className="size-10" />
         </div>
       )}
-      <div className="flex-1 flex flex-col min-h-0">{children}</div>
+      <div className="flex-1 flex flex-col min-h-0 overflow-y-auto overscroll-contain">{children}</div>
       <BottomNav />
     </div>
   );

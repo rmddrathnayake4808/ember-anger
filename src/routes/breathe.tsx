@@ -71,7 +71,7 @@ function Breathe() {
 
   return (
     <AppShell title="Box Breathing">
-      <div className="flex-1 flex flex-col items-center justify-between px-6 pb-16 pt-4">
+      <div className="flex-1 flex flex-col items-center justify-between px-6 pb-4 pt-4">
         <div className="text-center max-w-xs">
           <p className="text-sm text-ink-light text-pretty">
             Inhale, hold, exhale, rest — each for four counts. Let your shoulders soften.

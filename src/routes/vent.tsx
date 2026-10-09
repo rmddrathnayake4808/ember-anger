@@ -133,7 +133,7 @@ function Vent() {
 
   return (
     <AppShell title="Voice Dump">
-      <div className="flex-1 flex flex-col items-center justify-between px-6 pb-16 pt-4">
+      <div className="flex-1 flex flex-col items-center justify-between px-6 pb-4 pt-4">
         <p className="text-sm text-ink-light text-center text-pretty max-w-xs">
           Say everything. No filter. Your recording stays on this device — keep it or delete it.
         </p>
