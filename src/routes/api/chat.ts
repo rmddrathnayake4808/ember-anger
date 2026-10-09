@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { convertToModelMessages, streamText, type UIMessage } from "ai";
+import { createClient } from "@supabase/supabase-js";
+import type { Database } from "@/integrations/supabase/types";
 import { createLovableAiGatewayProvider } from "@/lib/ai-gateway.server";
 
 const SYSTEM_PROMPT = `You are Ember's emotion companion inside a calm anger-management app.
@@ -16,8 +18,18 @@ export const Route = createFileRoute("/api/chat")({
         const token = request.headers.get("authorization")?.replace(/^Bearer\s+/i, "");
         if (!token) return new Response("Unauthorized", { status: 401 });
 
-        const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-        const { data: userData, error: userError } = await supabaseAdmin.auth.getUser(token);
+        const SUPABASE_URL = process.env.SUPABASE_URL;
+        const SUPABASE_PUBLISHABLE_KEY = process.env.SUPABASE_PUBLISHABLE_KEY;
+        if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
+          return new Response("Server not configured", { status: 500 });
+        }
+
+        const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+          global: { headers: { Authorization: `Bearer ${token}` } },
+          auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
+        });
+
+        const { data: userData, error: userError } = await supabase.auth.getUser(token);
         const userId = userData?.user?.id;
         if (userError || !userId) return new Response("Unauthorized", { status: 401 });
 
@@ -45,7 +57,7 @@ export const Route = createFileRoute("/api/chat")({
 
         const latest = uiMessages[uiMessages.length - 1];
         if (latest?.role === "user") {
-          const { error } = await supabaseAdmin
+          const { error } = await supabase
             .from("chat_messages")
             .insert({ user_id: userId, role: "user", parts: latest.parts as never });
           if (error) console.error("Failed to save user chat message", error.message);
@@ -62,7 +74,7 @@ export const Route = createFileRoute("/api/chat")({
           originalMessages: uiMessages,
           onFinish: async ({ responseMessage }) => {
             if (!responseMessage) return;
-            const { error } = await supabaseAdmin
+            const { error } = await supabase
               .from("chat_messages")
               .insert({ user_id: userId, role: "assistant", parts: responseMessage.parts as never });
             if (error) console.error("Failed to save assistant chat message", error.message);
