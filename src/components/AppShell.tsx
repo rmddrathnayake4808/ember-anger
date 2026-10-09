@@ -4,7 +4,7 @@ import { BottomNav } from "@/components/BottomNav";
 
 export function AppShell({ children, title, back = true }: { children: ReactNode; title?: string; back?: boolean }) {
   return (
-    <div className="h-dvh w-full bg-sand-100 flex flex-col overflow-hidden">
+    <div className="h-dvh w-full bg-sand-100 flex flex-col overflow-hidden selection:bg-clay/25">
       {(title || back) && (
         <div className="flex items-center justify-between px-6 pt-5 pb-3 shrink-0">
           {back ? (
@@ -24,7 +24,7 @@ export function AppShell({ children, title, back = true }: { children: ReactNode
           <span className="size-10" />
         </div>
       )}
-      <div className="flex-1 flex flex-col min-h-0 overflow-y-auto overscroll-contain">{children}</div>
+      <div className="flex-1 flex flex-col min-h-0 overflow-y-auto overscroll-contain pb-24">{children}</div>
       <BottomNav />
     </div>
   );

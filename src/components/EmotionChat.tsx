@@ -65,7 +65,7 @@ export function EmotionChat() {
     return (
       <a
         href="/signin"
-        className="fixed bottom-28 right-5 z-40 size-14 rounded-full bg-clay text-primary-foreground shadow-[var(--shadow-card)] flex items-center justify-center active:scale-95 transition-transform"
+        className="fixed bottom-24 right-4 z-40 size-14 rounded-full bg-clay text-primary-foreground shadow-[0_12px_28px_-8px_var(--clay-dark)] ring-4 ring-sand-100/70 flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"
         aria-label="Sign in to chat about your emotions"
       >
         <MessageCircleHeart className="size-6" />
@@ -77,7 +77,7 @@ export function EmotionChat() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="fixed bottom-28 right-5 z-40 size-14 rounded-full bg-clay text-primary-foreground shadow-[var(--shadow-card)] flex items-center justify-center active:scale-95 transition-transform"
+        className="fixed bottom-24 right-4 z-40 size-14 rounded-full bg-clay text-primary-foreground shadow-[0_12px_28px_-8px_var(--clay-dark)] ring-4 ring-sand-100/70 flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"
         aria-label="Chat about your emotions"
       >
         <MessageCircleHeart className="size-6" />
@@ -91,7 +91,7 @@ export function EmotionChat() {
             onClick={() => setOpen(false)}
             aria-label="Close chat"
           />
-          <div className="h-[85dvh] rounded-t-[28px] border-t border-clay/25 bg-sand-100 flex flex-col overflow-hidden shadow-[var(--shadow-card)]">
+          <div className="mx-auto h-[85dvh] w-full max-w-2xl rounded-t-[28px] border-t border-clay/25 bg-sand-100 flex flex-col overflow-hidden shadow-[0_-18px_50px_-24px_oklch(0.08_0.04_245/0.8)]">
             {initial === null ? (
               <div className="flex-1 flex items-center justify-center">
                 <Shimmer>Opening your space...</Shimmer>
@@ -131,8 +131,16 @@ function ChatPanel({
     id: "ember-emotion-chat",
     messages: initialMessages,
     transport,
-    onError: (e) =>
-      setError(e.message?.includes("401") ? "Please sign in again to chat." : "Something went wrong — try again."),
+    onError: (e) => {
+      const message = e.message.toLowerCase();
+      setError(
+        message.includes("401") || message.includes("unauthorized")
+          ? "Your session expired. Please sign in again."
+          : message.includes("402") || message.includes("credits")
+            ? "The companion is temporarily unavailable. Please try again later."
+            : "I couldn't respond right now. Please try again.",
+      );
+    },
   });
 
   const busy = status === "submitted" || status === "streaming";

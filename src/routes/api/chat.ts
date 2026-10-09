@@ -18,13 +18,13 @@ export const Route = createFileRoute("/api/chat")({
         const token = request.headers.get("authorization")?.replace(/^Bearer\s+/i, "");
         if (!token) return new Response("Unauthorized", { status: 401 });
 
-        const SUPABASE_URL = process.env.SUPABASE_URL;
-        const SUPABASE_PUBLISHABLE_KEY = process.env.SUPABASE_PUBLISHABLE_KEY;
-        if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
+        const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
+        const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_PUBLISHABLE_KEY || process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+        if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
           return new Response("Server not configured", { status: 500 });
         }
 
-        const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+        const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_ANON_KEY, {
           global: { headers: { Authorization: `Bearer ${token}` } },
           auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
         });
@@ -33,7 +33,12 @@ export const Route = createFileRoute("/api/chat")({
         const userId = userData?.user?.id;
         if (userError || !userId) return new Response("Unauthorized", { status: 401 });
 
-        const body = (await request.json()) as { messages?: unknown };
+        let body: { messages?: unknown };
+        try {
+          body = (await request.json()) as { messages?: unknown };
+        } catch {
+          return new Response("Invalid request body", { status: 400 });
+        }
         const messages = body.messages;
         if (!Array.isArray(messages) || messages.length === 0) {
           return new Response("Messages are required", { status: 400 });
