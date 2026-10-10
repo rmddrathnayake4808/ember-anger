@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { convertToModelMessages, streamText, type UIMessage } from "ai";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
-import { createOpenAIProvider } from "@/lib/ai-gateway.server";
+import { createOpenRouterProvider } from "@/lib/ai-gateway.server";
 
 const SYSTEM_PROMPT = `You are Ember's emotion companion inside a calm anger-management app.
 You help the person understand, name and work through anger, frustration, irritation and the feelings underneath them.
@@ -57,7 +57,7 @@ export const Route = createFileRoute("/api/chat")({
         }
         if (uiMessages.length === 0) return new Response("Messages are required", { status: 400 });
 
-        const key = process.env["OPENAI_API_KEY"];
+        const key = process.env["OPENROUTER_API_KEY"];
         if (!key) return new Response("AI is not configured for this project yet.", { status: 500 });
 
         const latest = uiMessages[uiMessages.length - 1];
@@ -68,9 +68,9 @@ export const Route = createFileRoute("/api/chat")({
           if (error) console.error("Failed to save user chat message", error.message);
         }
 
-        const openai = createOpenAIProvider(key);
+        const openrouter = createOpenRouterProvider(key);
         const result = streamText({
-          model: openai("gpt-4o-mini"),
+          model: openrouter("openai/gpt-4o-mini"),
           system: SYSTEM_PROMPT,
           messages: await convertToModelMessages(uiMessages),
         });
