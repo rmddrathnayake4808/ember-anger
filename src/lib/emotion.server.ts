@@ -7,7 +7,7 @@ export type FaceReading = {
   summary: string;
 };
 
-const GATEWAY_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
+const OPENAI_URL = "https://api.openai.com/v1/chat/completions";
 
 const SYSTEM_PROMPT = `You are a facial expression analyst inside a calm anger-management app.
 Look at the single face in the photo and rank the visible emotions.
@@ -51,17 +51,17 @@ const TOOL = {
 };
 
 export async function readFaceEmotions(imageDataUrl: string): Promise<FaceReading> {
-  const apiKey = process.env["LOVABLE_API_KEY"];
+  const apiKey = process.env["OPENAI_API_KEY"];
   if (!apiKey) throw new Error("AI is not configured for this project yet.");
 
-  const response = await fetch(GATEWAY_URL, {
+  const response = await fetch(OPENAI_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
-      model: "google/gemini-2.5-flash",
+      model: "gpt-4o-mini",
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
         {
