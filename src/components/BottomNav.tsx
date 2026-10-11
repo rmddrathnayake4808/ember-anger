@@ -14,7 +14,7 @@ export function BottomNav() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-0 z-30 flex justify-center px-3 pb-[max(0.625rem,env(safe-area-inset-bottom))]">
-      <nav className="pointer-events-auto w-full max-w-3xl flex items-center justify-between gap-1 rounded-[2rem] border border-clay/15 bg-sand-50/70 backdrop-blur-2xl shadow-[0_8px_32px_-6px_oklch(0.12_0.06_245/0.35),inset_0_1px_1px_oklch(1_0_0/0.6)] px-2.5 py-2 transition-all duration-300 animate-[nav-rise_0.5s_cubic-bezier(0.22,1,0.36,1)_forwards]">
+      <nav className="pointer-events-auto w-full max-w-3xl flex items-center justify-between gap-1 rounded-[2rem] border border-clay/12 bg-sand-50/65 backdrop-blur-2xl shadow-[0_6px_24px_-8px_oklch(0.25_0.03_60/0.2),inset_0_1px_1px_oklch(1_0_0/0.5)] px-2.5 py-2 transition-all duration-300 animate-[nav-rise_0.5s_cubic-bezier(0.22,1,0.36,1)_forwards]">
         {items.map(({ to, label, icon: Icon }) => {
           const active = pathname === to;
           return (

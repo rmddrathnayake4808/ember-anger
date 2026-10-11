@@ -127,7 +127,7 @@ function SignUp() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-clay text-sand-50 rounded-[24px] py-4 font-display font-extrabold text-lg shadow-[0_8px_0_var(--clay-dark)] active:translate-y-2 active:shadow-[0_0_0_var(--clay-dark)] transition-all disabled:opacity-60"
+          className="w-full bg-clay text-sand-50 rounded-[24px] py-4 font-display font-extrabold text-lg shadow-[0_6px_0_var(--clay-dark)] active:translate-y-1.5 active:shadow-[0_0_0_var(--clay-dark)] transition-all disabled:opacity-60"
         >
           {loading ? "Creating…" : "Create Account"}
         </button>

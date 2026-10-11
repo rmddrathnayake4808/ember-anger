@@ -74,7 +74,7 @@ function Home() {
     root.style.setProperty("--clay", c);
     root.style.setProperty("--flow", c);
     root.style.setProperty("--primary", c);
-    root.style.setProperty("--flow-soft", `oklch(0.73 0.09 ${hue} / 0.18)`);
+    root.style.setProperty("--flow-soft", `oklch(0.7 0.07 ${hue} / 0.12)`);
     root.style.setProperty(
       "--sand-50",
       dark ? `oklch(0.34 0.05 ${hue})` : `oklch(0.96 0.03 ${hue})`,
@@ -165,7 +165,7 @@ function Home() {
 
           <div
             className="relative h-7 rounded-full border border-clay/25 flex items-center px-1 shadow-[inset_0_2px_10px_oklch(0.22_0.06_250/0.2)]"
-            style={{ background: "linear-gradient(to right, oklch(0.72 0.17 145), oklch(0.86 0.17 95), oklch(0.62 0.21 27))" }}
+            style={{ background: "linear-gradient(to right, oklch(0.78 0.1 145), oklch(0.85 0.1 95), oklch(0.68 0.12 27))" }}
           >
             <input
               type="range"
@@ -257,6 +257,7 @@ function tensionHue(t: number) {
 function tensionColor(t: number) {
   const k = Math.max(0, Math.min(10, t)) / 10;
   const hue = tensionHue(t);
-  const l = k < 0.5 ? 0.72 + k * 0.28 : 0.86 - (k - 0.5) * 0.48;
-  return `oklch(${l.toFixed(3)} ${(0.17 + k * 0.04).toFixed(3)} ${hue})`;
+  const l = k < 0.5 ? 0.72 + k * 0.22 : 0.84 - (k - 0.5) * 0.38;
+  const chroma = (0.1 + k * 0.03).toFixed(3);
+  return `oklch(${l.toFixed(3)} ${chroma} ${hue})`;
 }
