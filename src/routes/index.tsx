@@ -4,7 +4,7 @@ import { Wind, MessageSquare, Trash2, Footprints, ScanFace, Phone, BookOpen, Lig
 import { detectCountry, emergencyNumber } from "@/lib/emergency";
 import { AppShell } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
-import { getCheckInStreak, getCheckIns, saveCheckIn } from "@/lib/user-data";
+import { getCheckIns, getTotalCheckInDays, saveCheckIn } from "@/lib/user-data";
 import { useSystemTheme } from "@/hooks/use-system-theme";
 import { useAuth } from "@/lib/auth-context";
 
@@ -60,7 +60,7 @@ function Home() {
     if (!loading && !user) navigate({ to: "/signin" });
   }, [loading, user, navigate]);
   const [tension, setTension] = useState(5);
-  const [streak, setStreak] = useState(0);
+  const [totalDays, setTotalDays] = useState(0);
   const [name, setName] = useState("friend");
   const [greeting, setGreeting] = useState("Hello");
   const [sos, setSos] = useState("112");
@@ -71,9 +71,14 @@ function Home() {
     const c = tensionColor(tension);
     const hue = tensionHue(tension);
     const dark = root.classList.contains("dark");
+    const deepC = `oklch(${dark ? 0.5 : 0.46} 0.06 ${hue})`;
     root.style.setProperty("--clay", c);
+    root.style.setProperty("--clay-dark", deepC);
     root.style.setProperty("--flow", c);
     root.style.setProperty("--primary", c);
+    root.style.setProperty("--primary-deep", deepC);
+    root.style.setProperty("--accent", c);
+    root.style.setProperty("--ring", c);
     root.style.setProperty("--flow-soft", `oklch(0.7 0.07 ${hue} / 0.12)`);
     root.style.setProperty(
       "--sand-50",
@@ -95,7 +100,7 @@ function Home() {
         if (!active) return;
         const today = new Date().toISOString().slice(0, 10);
         setTension(checkIns.find((checkIn) => checkIn.date === today)?.level ?? 5);
-        setStreak(getCheckInStreak(checkIns));
+        setTotalDays(getTotalCheckInDays(checkIns));
         setName(profile?.display_name ?? "friend");
       } catch {
         if (active) setDataError("Your saved data could not be loaded.");
@@ -114,7 +119,10 @@ function Home() {
     setTension(v);
     if (!user) return;
     void saveCheckIn(user.id, v)
-      .then(async () => setStreak(getCheckInStreak(await getCheckIns(user.id))))
+      .then(async () => {
+        const ci = await getCheckIns(user.id);
+        setTotalDays(getTotalCheckInDays(ci));
+      })
       .catch(() => setDataError("Your check-in could not be saved."));
     if (v > 7 && typeof Notification !== "undefined") {
       const notify = () => {
@@ -130,27 +138,31 @@ function Home() {
   return (
     <AppShell back={false}>
       <div className="flex-1 px-6 pt-4 pb-4 flex flex-col gap-3 min-h-0">
-        <header className="flex items-start justify-between gap-3">
-          <div className="min-w-0">
-            <p className="text-xs font-semibold text-flow leading-tight">
-              {greeting}, {name}
-            </p>
-            <h1 className="font-display font-bold text-clay text-2xl tracking-tight leading-tight">
-              Ember — your space for anger release
-            </h1>
-          </div>
+        <header className="flex items-center justify-between gap-3">
+          <a
+            href={`tel:${sos}`}
+            aria-label={`Call emergency services ${sos}`}
+            className="bg-destructive text-destructive-foreground rounded-full px-3 py-2 flex items-center gap-1.5 font-display font-bold text-xs shadow-[var(--shadow-soft)] active:scale-95 transition-transform shrink-0"
+          >
+            <Phone className="size-3.5" /> SOS {sos}
+          </a>
 
           <div className="flex items-center gap-2 shrink-0">
-            <span className="bg-flow-soft border border-flow/30 rounded-full px-2.5 py-1.5 text-xs font-semibold text-flow tabular-nums">{streak}d</span>
-            <a
-              href={`tel:${sos}`}
-              aria-label={`Call emergency services ${sos}`}
-              className="bg-destructive text-destructive-foreground rounded-full px-3 py-2 flex items-center gap-1.5 font-display font-bold text-xs shadow-[var(--shadow-soft)] active:scale-95 transition-transform"
-            >
-              <Phone className="size-3.5" /> SOS {sos}
-            </a>
+            <div className="bg-flow-soft border border-flow/30 rounded-full px-3 py-1.5 flex items-center gap-1.5">
+              <span className="font-display font-bold text-flow text-sm tabular-nums leading-none">{totalDays}</span>
+              <span className="text-[10px] font-semibold text-flow/80 leading-none">days visited</span>
+            </div>
           </div>
         </header>
+
+        <div className="min-w-0">
+          <p className="text-xs font-semibold text-flow leading-tight">
+            {greeting}, {name}
+          </p>
+          <h1 className="font-display font-bold text-clay text-2xl tracking-tight leading-tight">
+            Ember — your space for anger release
+          </h1>
+        </div>
 
         {/* Tension hero */}
         <section className="bg-sand-50/70 border border-clay/20 rounded-[24px] p-4 backdrop-blur-md shadow-[var(--shadow-inset-soft)]">
@@ -164,7 +176,7 @@ function Home() {
           </div>
 
           <div
-            className="relative h-7 rounded-full border border-clay/25 flex items-center px-1 shadow-[inset_0_2px_10px_oklch(0.22_0.06_250/0.2)]"
+            className="relative h-7 rounded-full border border-clay/25 flex items-center px-1 shadow-[inset_0_2px_8px_oklch(0.3_0.03_60/0.12)]"
             style={{ background: "linear-gradient(to right, oklch(0.78 0.1 145), oklch(0.85 0.1 95), oklch(0.68 0.12 27))" }}
           >
             <input

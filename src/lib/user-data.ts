@@ -112,3 +112,7 @@ export function getCheckInStreak(checkIns: CloudCheckIn[]): number {
 
   return streak;
 }
+
+export function getTotalCheckInDays(checkIns: CloudCheckIn[]): number {
+  return new Set(checkIns.map((c) => c.date)).size;
+}
