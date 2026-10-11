@@ -71,7 +71,7 @@ function Home() {
     const c = tensionColor(tension);
     const hue = tensionHue(tension);
     const dark = root.classList.contains("dark");
-    const deepC = `oklch(${dark ? 0.5 : 0.46} 0.06 ${hue})`;
+    const deepC = `oklch(${dark ? 0.5 : 0.44} 0.2 ${hue})`;
     root.style.setProperty("--clay", c);
     root.style.setProperty("--clay-dark", deepC);
     root.style.setProperty("--flow", c);
@@ -79,7 +79,7 @@ function Home() {
     root.style.setProperty("--primary-deep", deepC);
     root.style.setProperty("--accent", c);
     root.style.setProperty("--ring", c);
-    root.style.setProperty("--flow-soft", `oklch(0.7 0.07 ${hue} / 0.12)`);
+    root.style.setProperty("--flow-soft", `oklch(0.6 0.17 ${hue} / 0.15)`);
     root.style.setProperty(
       "--sand-50",
       dark ? `oklch(0.34 0.05 ${hue})` : `oklch(0.96 0.03 ${hue})`,
@@ -177,7 +177,7 @@ function Home() {
 
           <div
             className="relative h-7 rounded-full border border-clay/25 flex items-center px-1 shadow-[inset_0_2px_8px_oklch(0.3_0.03_60/0.12)]"
-            style={{ background: "linear-gradient(to right, oklch(0.78 0.1 145), oklch(0.85 0.1 95), oklch(0.68 0.12 27))" }}
+            style={{ background: "linear-gradient(to right, oklch(0.65 0.17 145), oklch(0.78 0.16 90), oklch(0.6 0.2 27))" }}
           >
             <input
               type="range"
@@ -269,7 +269,7 @@ function tensionHue(t: number) {
 function tensionColor(t: number) {
   const k = Math.max(0, Math.min(10, t)) / 10;
   const hue = tensionHue(t);
-  const l = k < 0.5 ? 0.72 + k * 0.22 : 0.84 - (k - 0.5) * 0.38;
-  const chroma = (0.1 + k * 0.03).toFixed(3);
+  const l = k < 0.5 ? 0.6 + k * 0.12 : 0.72 - (k - 0.5) * 0.14;
+  const chroma = (0.16 + k * 0.04).toFixed(3);
   return `oklch(${l.toFixed(3)} ${chroma} ${hue})`;
 }
