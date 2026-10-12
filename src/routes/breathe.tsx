@@ -71,7 +71,7 @@ function Breathe() {
 
   return (
     <AppShell title="Box Breathing">
-      <div className="flex-1 flex flex-col items-center justify-between px-6 pb-4 pt-4">
+      <div className="flex-1 flex flex-col items-center justify-between px-6 pb-16 pt-4">
         <div className="text-center max-w-xs">
           <p className="text-sm text-ink-light text-pretty">
             Inhale, hold, exhale, rest — each for four counts. Let your shoulders soften.
@@ -82,7 +82,7 @@ function Breathe() {
           <div className="absolute inset-0 rounded-full bg-clay/5" />
           <div className="absolute inset-6 rounded-full bg-clay/10" />
           <div
-            className="size-56 rounded-full bg-linear-to-br from-clay to-clay-dark shadow-[0_14px_40px_-12px_oklch(0.55_0.06_200/0.35)] flex flex-col items-center justify-center text-sand-50"
+            className="size-56 rounded-full bg-linear-to-br from-clay to-clay-dark shadow-[0_20px_60px_-15px_oklch(0.585_0.135_38/0.55)] flex flex-col items-center justify-center text-sand-50"
             style={{
               transform: `scale(${running ? scale : 0.85})`,
               transition: `transform ${transitionMs}ms ease-in-out`,
@@ -102,7 +102,7 @@ function Breathe() {
           <div className="w-full flex gap-3">
             <button
               onClick={() => setRunning((r) => !r)}
-              className="flex-1 bg-clay text-sand-50 rounded-[28px] py-5 font-display font-extrabold text-lg shadow-[0_6px_0_var(--clay-dark)] active:translate-y-1.5 active:shadow-[0_0_0_var(--clay-dark)] transition-all"
+              className="flex-1 bg-clay text-sand-50 rounded-[28px] py-5 font-display font-extrabold text-lg shadow-[0_8px_0_var(--clay-dark)] active:translate-y-2 active:shadow-[0_0_0_var(--clay-dark)] transition-all"
             >
               {running ? "Pause" : "Begin"}
             </button>

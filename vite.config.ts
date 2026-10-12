@@ -6,12 +6,4 @@
 // You can pass additional config via defineConfig({ vite: { ... } }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
-export default defineConfig({
-  nitro: {
-    preset: "netlify",
-    output: {
-      dir: "dist",
-      publicDir: "dist/client",
-    },
-  },
-});
+export default defineConfig();

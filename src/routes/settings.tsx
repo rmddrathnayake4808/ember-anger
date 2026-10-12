@@ -1,12 +1,9 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Shield, Trash2 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 import { getStoredTheme, setStoredTheme, type ThemeMode } from "@/lib/theme";
-import { clearUserData, getCheckIns, getJournalEntries } from "@/lib/user-data";
-import { storage } from "@/lib/storage";
 
 export const Route = createFileRoute("/settings")({
   head: () => ({
@@ -84,40 +81,6 @@ function Settings() {
     navigate({ to: "/signin" });
   };
 
-  const [journalCount, setJournalCount] = useState(0);
-  const [checkInCount, setCheckInCount] = useState(0);
-  const [clearing, setClearing] = useState(false);
-  const [clearedFlash, setClearedFlash] = useState(false);
-  const [dataError, setDataError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!user) return;
-    void Promise.all([getJournalEntries(user.id), getCheckIns(user.id)])
-      .then(([entries, checkIns]) => {
-        setJournalCount(entries.length);
-        setCheckInCount(checkIns.length);
-      })
-      .catch(() => setDataError("Your saved data could not be loaded."));
-  }, [user]);
-
-  const clearSavedData = async () => {
-    if (!user) return;
-    setClearing(true);
-    setDataError(null);
-    try {
-      await clearUserData(user.id);
-      storage.clearAll();
-      setJournalCount(0);
-      setCheckInCount(0);
-      setClearedFlash(true);
-      setTimeout(() => setClearedFlash(false), 1500);
-    } catch {
-      setDataError("Your saved data could not be cleared.");
-    } finally {
-      setClearing(false);
-    }
-  };
-
   return (
     <AppShell title="Settings">
       <div className="flex-1 px-6 pb-4 flex flex-col gap-3 min-h-0">
@@ -180,44 +143,6 @@ function Settings() {
             <ThemePreview mode="light" />
             <ThemePreview mode="dark" />
           </div>
-        </Section>
-
-        {/* Privacy & Data */}
-        <Section title="Privacy & Data">
-          <div className="flex items-start gap-3">
-            <div className="size-9 rounded-full bg-flow-soft text-flow flex items-center justify-center shrink-0">
-              <Shield className="size-4" />
-            </div>
-            <p className="text-[11px] text-ink-light text-pretty leading-snug">
-              Your tension check-ins and journal entries are securely saved to your Ember account
-              database. Only you can access them, and they remain available when you sign in again.
-            </p>
-          </div>
-          <div className="flex items-center justify-between text-xs">
-            <span className="text-ink-light">Journal entries in account</span>
-            <span className="font-bold text-ink tabular-nums">{journalCount}</span>
-          </div>
-          <div className="flex items-center justify-between text-xs">
-            <span className="text-ink-light">Tension check-ins in account</span>
-            <span className="font-bold text-ink tabular-nums">{checkInCount}</span>
-          </div>
-          {dataError && (
-            <p role="alert" className="text-xs text-destructive text-center">{dataError}</p>
-          )}
-          <button
-            onClick={() => void clearSavedData()}
-            disabled={clearing}
-            className="w-full bg-destructive/10 text-destructive border border-destructive/30 rounded-[18px] py-3 text-sm font-display font-bold active:scale-[0.98] transition-transform disabled:opacity-50 flex items-center justify-center gap-2"
-          >
-            <Trash2 className="size-4" />
-            {clearedFlash ? "Cleared" : "Clear saved data"}
-          </button>
-          <Link
-            to="/privacy"
-            className="block w-full text-center text-xs font-bold text-clay active:scale-95 transition-transform"
-          >
-            Read full Privacy Policy →
-          </Link>
         </Section>
 
         {/* Account */}

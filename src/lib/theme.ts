@@ -5,7 +5,7 @@ export type ThemeMode = "system" | "light" | "dark";
 export function getStoredTheme(): ThemeMode {
   if (typeof window === "undefined") return "system";
   const v = localStorage.getItem(KEY);
-  return v === "light" || v === "dark" || v === "system" ? v : "light";
+  return v === "light" || v === "dark" || v === "system" ? v : "system";
 }
 
 export function setStoredTheme(mode: ThemeMode) {

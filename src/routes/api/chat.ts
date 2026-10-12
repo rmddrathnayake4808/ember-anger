@@ -1,8 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { convertToModelMessages, streamText, type UIMessage } from "ai";
-import { createClient } from "@supabase/supabase-js";
-import type { Database } from "@/integrations/supabase/types";
-import { createOpenRouterProvider } from "@/lib/ai-gateway.server";
+import { createLovableAiGatewayProvider } from "@/lib/ai-gateway.server";
 
 const SYSTEM_PROMPT = `You are Ember's emotion companion inside a calm anger-management app.
 You help the person understand, name and work through anger, frustration, irritation and the feelings underneath them.
@@ -18,27 +16,12 @@ export const Route = createFileRoute("/api/chat")({
         const token = request.headers.get("authorization")?.replace(/^Bearer\s+/i, "");
         if (!token) return new Response("Unauthorized", { status: 401 });
 
-        const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
-        const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_PUBLISHABLE_KEY || process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-        if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-          return new Response("Server not configured", { status: 500 });
-        }
-
-        const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_ANON_KEY, {
-          global: { headers: { Authorization: `Bearer ${token}` } },
-          auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
-        });
-
-        const { data: userData, error: userError } = await supabase.auth.getUser(token);
+        const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+        const { data: userData, error: userError } = await supabaseAdmin.auth.getUser(token);
         const userId = userData?.user?.id;
         if (userError || !userId) return new Response("Unauthorized", { status: 401 });
 
-        let body: { messages?: unknown };
-        try {
-          body = (await request.json()) as { messages?: unknown };
-        } catch {
-          return new Response("Invalid request body", { status: 400 });
-        }
+        const body = (await request.json()) as { messages?: unknown };
         const messages = body.messages;
         if (!Array.isArray(messages) || messages.length === 0) {
           return new Response("Messages are required", { status: 400 });
@@ -57,20 +40,20 @@ export const Route = createFileRoute("/api/chat")({
         }
         if (uiMessages.length === 0) return new Response("Messages are required", { status: 400 });
 
-        const key = process.env["OPENROUTER_API_KEY"];
+        const key = process.env["LOVABLE_API_KEY"];
         if (!key) return new Response("AI is not configured for this project yet.", { status: 500 });
 
         const latest = uiMessages[uiMessages.length - 1];
         if (latest?.role === "user") {
-          const { error } = await supabase
+          const { error } = await supabaseAdmin
             .from("chat_messages")
             .insert({ user_id: userId, role: "user", parts: latest.parts as never });
           if (error) console.error("Failed to save user chat message", error.message);
         }
 
-        const openrouter = createOpenRouterProvider(key);
+        const gateway = createLovableAiGatewayProvider(key);
         const result = streamText({
-          model: openrouter("openai/gpt-4o-mini"),
+          model: gateway("openai/gpt-5-mini"),
           system: SYSTEM_PROMPT,
           messages: await convertToModelMessages(uiMessages),
         });
@@ -79,7 +62,7 @@ export const Route = createFileRoute("/api/chat")({
           originalMessages: uiMessages,
           onFinish: async ({ responseMessage }) => {
             if (!responseMessage) return;
-            const { error } = await supabase
+            const { error } = await supabaseAdmin
               .from("chat_messages")
               .insert({ user_id: userId, role: "assistant", parts: responseMessage.parts as never });
             if (error) console.error("Failed to save assistant chat message", error.message);

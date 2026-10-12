@@ -133,7 +133,7 @@ function Vent() {
 
   return (
     <AppShell title="Voice Dump">
-      <div className="flex-1 flex flex-col items-center justify-between px-6 pb-4 pt-4">
+      <div className="flex-1 flex flex-col items-center justify-between px-6 pb-16 pt-4">
         <p className="text-sm text-ink-light text-center text-pretty max-w-xs">
           Say everything. No filter. Your recording stays on this device — keep it or delete it.
         </p>
@@ -209,14 +209,14 @@ function Vent() {
           {!recording ? (
             <button
               onClick={start}
-              className="w-full bg-clay text-sand-50 rounded-[28px] py-5 font-display font-extrabold text-lg shadow-[0_6px_0_var(--clay-dark)] active:translate-y-1.5 active:shadow-[0_0_0_var(--clay-dark)] transition-all"
+              className="w-full bg-clay text-sand-50 rounded-[28px] py-5 font-display font-extrabold text-lg shadow-[0_8px_0_var(--clay-dark)] active:translate-y-2 active:shadow-[0_0_0_var(--clay-dark)] transition-all"
             >
               {released ? "Vent Again" : "Start Venting"}
             </button>
           ) : (
             <button
               onClick={release}
-              className="w-full bg-ink text-sand-50 rounded-[28px] py-5 font-display font-extrabold text-lg shadow-[0_6px_0_oklch(0.25_0.02_50)] active:translate-y-1.5 active:shadow-[0_0_0_oklch(0.25_0.02_50)] transition-all"
+              className="w-full bg-ink text-sand-50 rounded-[28px] py-5 font-display font-extrabold text-lg shadow-[0_8px_0_oklch(0.22_0.02_30)] active:translate-y-2 active:shadow-[0_0_0_oklch(0.22_0.02_30)] transition-all"
             >
               Release & Forget
             </button>

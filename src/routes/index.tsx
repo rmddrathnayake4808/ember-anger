@@ -1,10 +1,9 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Wind, MessageSquare, Trash2, Footprints, ScanFace, Phone, BookOpen, Lightbulb, PenLine, Brain, TriangleAlert as AlertTriangle } from "lucide-react";
+import { Wind, MessageSquare, Trash2, Footprints, ScanFace, Phone, BookOpen, Lightbulb, PenLine, Brain, Settings as SettingsIcon, AlertTriangle } from "lucide-react";
 import { detectCountry, emergencyNumber } from "@/lib/emergency";
 import { AppShell } from "@/components/AppShell";
-import { supabase } from "@/integrations/supabase/client";
-import { getCheckIns, getTotalCheckInDays, saveCheckIn } from "@/lib/user-data";
+import { storage } from "@/lib/storage";
 import { useSystemTheme } from "@/hooks/use-system-theme";
 import { useAuth } from "@/lib/auth-context";
 
@@ -60,26 +59,20 @@ function Home() {
     if (!loading && !user) navigate({ to: "/signin" });
   }, [loading, user, navigate]);
   const [tension, setTension] = useState(5);
-  const [totalDays, setTotalDays] = useState(0);
+  const [streak, setStreak] = useState(0);
   const [name, setName] = useState("friend");
   const [greeting, setGreeting] = useState("Hello");
   const [sos, setSos] = useState("112");
-  const [dataError, setDataError] = useState<string | null>(null);
   useEffect(() => setSos(emergencyNumber(detectCountry())), []);
   useEffect(() => {
     const root = document.documentElement;
     const c = tensionColor(tension);
     const hue = tensionHue(tension);
     const dark = root.classList.contains("dark");
-    const deepC = `oklch(${dark ? 0.5 : 0.44} 0.2 ${hue})`;
     root.style.setProperty("--clay", c);
-    root.style.setProperty("--clay-dark", deepC);
     root.style.setProperty("--flow", c);
     root.style.setProperty("--primary", c);
-    root.style.setProperty("--primary-deep", deepC);
-    root.style.setProperty("--accent", c);
-    root.style.setProperty("--ring", c);
-    root.style.setProperty("--flow-soft", `oklch(0.6 0.17 ${hue} / 0.15)`);
+    root.style.setProperty("--flow-soft", `oklch(0.73 0.09 ${hue} / 0.18)`);
     root.style.setProperty(
       "--sand-50",
       dark ? `oklch(0.34 0.05 ${hue})` : `oklch(0.96 0.03 ${hue})`,
@@ -88,42 +81,17 @@ function Home() {
   }, [tension]);
 
   useEffect(() => {
-    if (!user) return;
-    let active = true;
-
-    const loadDashboard = async () => {
-      try {
-        const [{ data: profile }, checkIns] = await Promise.all([
-          supabase.from("profiles").select("display_name").eq("id", user.id).maybeSingle(),
-          getCheckIns(user.id),
-        ]);
-        if (!active) return;
-        const today = new Date().toISOString().slice(0, 10);
-        setTension(checkIns.find((checkIn) => checkIn.date === today)?.level ?? 5);
-        setTotalDays(getTotalCheckInDays(checkIns));
-        setName(profile?.display_name ?? "friend");
-      } catch {
-        if (active) setDataError("Your saved data could not be loaded.");
-      }
-      const h = new Date().getHours();
-      if (active) setGreeting(h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening");
-    };
-
-    void loadDashboard();
-    return () => {
-      active = false;
-    };
-  }, [user]);
+    setTension(storage.getTension());
+    setStreak(storage.getStreak());
+    setName(storage.getName());
+    const h = new Date().getHours();
+    setGreeting(h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening");
+  }, []);
 
   const onTensionChange = (v: number) => {
     setTension(v);
-    if (!user) return;
-    void saveCheckIn(user.id, v)
-      .then(async () => {
-        const ci = await getCheckIns(user.id);
-        setTotalDays(getTotalCheckInDays(ci));
-      })
-      .catch(() => setDataError("Your check-in could not be saved."));
+    storage.setTension(v);
+    setStreak(storage.getStreak());
     if (v > 7 && typeof Notification !== "undefined") {
       const notify = () => {
         try { new Notification("Ember: tension is high", { body: "Pause. Try a breathing round or another outlet.", icon: "/favicon.png" }); } catch {}
@@ -138,31 +106,27 @@ function Home() {
   return (
     <AppShell back={false}>
       <div className="flex-1 px-6 pt-4 pb-4 flex flex-col gap-3 min-h-0">
-        <header className="flex items-center justify-between gap-3">
-          <a
-            href={`tel:${sos}`}
-            aria-label={`Call emergency services ${sos}`}
-            className="bg-destructive text-destructive-foreground rounded-full px-3 py-2 flex items-center gap-1.5 font-display font-bold text-xs shadow-[var(--shadow-soft)] active:scale-95 transition-transform shrink-0"
-          >
-            <Phone className="size-3.5" /> SOS {sos}
-          </a>
+        <header className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <p className="text-xs font-semibold text-flow leading-tight">
+              {greeting}, {name}
+            </p>
+            <h1 className="font-display font-bold text-clay text-2xl tracking-tight leading-tight">
+              Ember — your space for anger release
+            </h1>
+          </div>
 
           <div className="flex items-center gap-2 shrink-0">
-            <div className="bg-flow-soft border border-flow/30 rounded-full px-3 py-1.5 flex items-center gap-1.5">
-              <span className="font-display font-bold text-flow text-sm tabular-nums leading-none">{totalDays}</span>
-              <span className="text-[10px] font-semibold text-flow/80 leading-none">days visited</span>
-            </div>
+            <span className="bg-flow-soft border border-flow/30 rounded-full px-2.5 py-1.5 text-xs font-semibold text-flow tabular-nums">{streak}d</span>
+            <a
+              href={`tel:${sos}`}
+              aria-label={`Call emergency services ${sos}`}
+              className="bg-destructive text-destructive-foreground rounded-full px-3 py-2 flex items-center gap-1.5 font-display font-bold text-xs shadow-[var(--shadow-soft)] active:scale-95 transition-transform"
+            >
+              <Phone className="size-3.5" /> SOS {sos}
+            </a>
           </div>
         </header>
-
-        <div className="min-w-0">
-          <p className="text-xs font-semibold text-flow leading-tight">
-            {greeting}, {name}
-          </p>
-          <h1 className="font-display font-bold text-clay text-2xl tracking-tight leading-tight">
-            Ember — your space for anger release
-          </h1>
-        </div>
 
         {/* Tension hero */}
         <section className="bg-sand-50/70 border border-clay/20 rounded-[24px] p-4 backdrop-blur-md shadow-[var(--shadow-inset-soft)]">
@@ -176,8 +140,8 @@ function Home() {
           </div>
 
           <div
-            className="relative h-7 rounded-full border border-clay/25 flex items-center px-1 shadow-[inset_0_2px_8px_oklch(0.3_0.03_60/0.12)]"
-            style={{ background: "linear-gradient(to right, oklch(0.65 0.17 145), oklch(0.78 0.16 90), oklch(0.6 0.2 27))" }}
+            className="relative h-7 rounded-full border border-clay/25 flex items-center px-1 shadow-[inset_0_2px_10px_oklch(0.22_0.06_250/0.2)]"
+            style={{ background: "linear-gradient(to right, oklch(0.72 0.17 145), oklch(0.86 0.17 95), oklch(0.62 0.21 27))" }}
           >
             <input
               type="range"
@@ -199,12 +163,6 @@ function Home() {
             Grounding: {TENSION_MESSAGES[tension]}
           </p>
         </section>
-
-        {dataError && (
-          <p role="alert" className="rounded-[16px] border border-destructive/30 bg-destructive/10 px-3 py-2 text-xs text-destructive">
-            {dataError}
-          </p>
-        )}
 
         {tension > 7 && (
           <div role="alert" className="rounded-[18px] border border-destructive/40 bg-destructive/10 p-3 flex gap-2 items-start">
@@ -228,6 +186,7 @@ function Home() {
           <Tile to="/techniques" label="Tips" icon={<Lightbulb className="size-4" />} tone="text-clay bg-clay/15" />
           <Tile to="/journal-prompts" label="Prompts" icon={<PenLine className="size-4" />} tone="text-ink bg-ink/10" />
           <Tile to="/cbt-anger-management" label="CBT" icon={<Brain className="size-4" />} tone="text-flow bg-flow-soft" />
+          <Tile to="/settings" label="Settings" icon={<SettingsIcon className="size-4" />} tone="text-ink bg-ink/10" />
         </div>
 
         <p className="mt-auto text-center text-[11px] text-ink-light text-pretty">
@@ -269,7 +228,6 @@ function tensionHue(t: number) {
 function tensionColor(t: number) {
   const k = Math.max(0, Math.min(10, t)) / 10;
   const hue = tensionHue(t);
-  const l = k < 0.5 ? 0.6 + k * 0.12 : 0.72 - (k - 0.5) * 0.14;
-  const chroma = (0.16 + k * 0.04).toFixed(3);
-  return `oklch(${l.toFixed(3)} ${chroma} ${hue})`;
+  const l = k < 0.5 ? 0.72 + k * 0.28 : 0.86 - (k - 0.5) * 0.48;
+  return `oklch(${l.toFixed(3)} ${(0.17 + k * 0.04).toFixed(3)} ${hue})`;
 }

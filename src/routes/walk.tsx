@@ -73,7 +73,7 @@ function Walk() {
 
   return (
     <AppShell title="Brisk Walk">
-      <div className="flex-1 flex flex-col items-center justify-between px-6 pb-4 pt-4">
+      <div className="flex-1 flex flex-col items-center justify-between px-6 pb-16 pt-4">
         <p className="text-sm text-ink-light text-center text-pretty max-w-xs">
           Move your body for ten minutes. Anger is energy — let it travel out through your feet.
         </p>
@@ -116,7 +116,7 @@ function Walk() {
           <button
             onClick={() => setRunning((r) => !r)}
             disabled={done}
-            className="flex-1 bg-clay text-sand-50 rounded-[28px] py-5 font-display font-extrabold text-lg shadow-[0_6px_0_var(--clay-dark)] active:translate-y-1.5 active:shadow-[0_0_0_var(--clay-dark)] transition-all disabled:opacity-50"
+            className="flex-1 bg-clay text-sand-50 rounded-[28px] py-5 font-display font-extrabold text-lg shadow-[0_8px_0_var(--clay-dark)] active:translate-y-2 active:shadow-[0_0_0_var(--clay-dark)] transition-all disabled:opacity-50"
           >
             {running ? "Pause" : seconds > 0 ? "Resume" : "Start Walk"}
           </button>
